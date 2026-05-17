@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PYDUDE — Playground</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<style>
+:root {
+  --g: #39ff14; --g2: #22cc0a; --g3: #0d5c04; --g4: #071f02;
+  --bg: #000; --text: #c8f5c0; --muted: #3a6e32; --panel: #050e03;
+  --border: rgba(57,255,20,0.13);
+  --ed-bg: #000; --ed-text: #c8f5c0; --ed-border: rgba(57,255,20,0.13);
+  --ai-bg: #050e03; --ai-text: #c8f5c0; --ai-border: rgba(57,255,20,0.13); --ai-msg-bg: rgba(0,0,0,0.4);
+}
+body.ed-light { --ed-bg:#f0fff0; --ed-text:#1a3a1a; --ed-border:rgba(0,100,0,0.2); }
+body.ai-light { --ai-bg:#f0fff0; --ai-text:#1a3a1a; --ai-border:rgba(0,100,0,0.2); --ai-msg-bg:rgba(255,255,255,0.7); }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; overflow:hidden; }
+body { background:var(--bg); color:var(--text); font-family:'Share Tech Mono',monospace; cursor:none; display:flex; flex-direction:column; }
+
+/* CURSOR */
+#cur { position:fixed; pointer-events:none; z-index:9999; width:10px; height:10px; border:1.5px solid var(--g); transform:translate(-50%,-50%); transition:width .08s,height .08s,background .08s; }
+#cur.act { width:16px; height:16px; background:rgba(57,255,20,0.1); }
+
+/* SCANLINES */
+#scan { position:fixed; inset:0; pointer-events:none; z-index:500; background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px); }
+
+/* PIXEL CANVAS */
+#gc { position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+/* NAV */
+nav { position:relative; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:50px; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.92); flex-shrink:0; }
+.logo { font-family:'Orbitron',sans-serif; font-weight:900; font-size:16px; color:var(--g); letter-spacing:.1em; text-decoration:none; }
+.logo sup { font-size:8px; color:var(--muted); font-family:'DM Mono',monospace; letter-spacing:.2em; vertical-align:super; margin-left:3px; }
+.nav-tabs { display:flex; gap:2px; }
+.nav-tab { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.2em; text-transform:uppercase; padding:6px 14px; border:1px solid transparent; color:var(--muted); text-decoration:none; transition:all .15s; cursor:none; }
+.nav-tab:hover, .nav-tab.on { border-color:var(--border); color:var(--g); background:rgba(57,255,20,0.04); }
+.nav-right { display:flex; align-items:center; gap:16px; }
+.sys-badge { font-family:'DM Mono',monospace; font-size:9px; color:var(--g3); letter-spacing:.15em; }
+.sys-badge b { color:var(--g2); font-weight:400; }
+.blink-dot { width:6px; height:6px; border-radius:50%; background:var(--g); animation:blink 1.2s step-end infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+/* APP */
+#app { flex:1; display:grid; grid-template-columns:1fr 340px; overflow:hidden; position:relative; z-index:10; }
+
+/* ── LEFT ── */
+#left { display:flex; flex-direction:column; border-right:1px solid var(--border); overflow:hidden; background:var(--ed-bg); transition:background .2s; }
+
+/* challenge bar */
+#challenge-bar { display:flex; align-items:center; gap:10px; padding:0 16px; height:38px; flex-shrink:0; border-bottom:1px solid var(--ed-border); background:rgba(0,0,0,0.55); transition:border-color .2s; }
+.ch-label { font-family:'DM Mono',monospace; font-size:9px; color:var(--g3); letter-spacing:.2em; text-transform:uppercase; }
+#ch-title-text { font-family:'DM Mono',monospace; font-size:11px; color:var(--ed-text); letter-spacing:.06em; transition:color .2s; }
+.ch-diff { font-size:8px; font-family:'DM Mono',monospace; letter-spacing:.2em; text-transform:uppercase; padding:2px 8px; border:1px solid; }
+.ch-diff.easy { border-color:var(--g3); color:var(--g2); }
+.ch-diff.medium { border-color:#cc8800; color:#ffcc00; }
+.ch-diff.hard { border-color:#cc2200; color:#ff5555; }
+
+/* light toggle */
+.lm-toggle { margin-left:auto; display:flex; align-items:center; gap:6px; }
+.lm-label { font-family:'DM Mono',monospace; font-size:8px; color:var(--g3); letter-spacing:.12em; text-transform:uppercase; }
+.toggle-sw { position:relative; width:32px; height:16px; cursor:none; }
+.toggle-sw input { opacity:0; width:0; height:0; position:absolute; }
+.toggle-track { position:absolute; inset:0; background:var(--g4); border:1px solid var(--border); transition:.2s; }
+.toggle-thumb { position:absolute; top:2px; left:2px; width:10px; height:10px; background:var(--g3); transition:.2s; }
+.toggle-sw input:checked ~ .toggle-track { background:rgba(57,255,20,0.15); border-color:var(--g); }
+.toggle-sw input:checked ~ .toggle-track .toggle-thumb { left:18px; background:var(--g); }
+
+/* pane tabs */
+.pane-bar { display:flex; align-items:center; height:34px; flex-shrink:0; border-bottom:1px solid var(--ed-border); background:rgba(0,0,0,0.4); transition:border-color .2s; }
+.pane-tab-item { font-family:'DM Mono',monospace; font-size:9px; color:var(--g3); letter-spacing:.15em; padding:0 16px; height:100%; display:flex; align-items:center; border-right:1px solid var(--ed-border); cursor:none; transition:all .15s; user-select:none; }
+.pane-tab-item.active { color:var(--g); background:rgba(57,255,20,0.05); }
+.pane-tab-item:hover:not(.active) { color:var(--muted); }
+.pane-actions { margin-left:auto; display:flex; gap:8px; align-items:center; padding-right:14px; }
+.ctrl { width:7px; height:7px; border-radius:50%; }
+.ctrl.r { background:#ff4444; } .ctrl.y { background:#ffcc00; } .ctrl.g { background:var(--g); }
+
+/* editor panes */
+.editor-pane { flex:1; overflow:hidden; display:none; flex-direction:column; }
+.editor-pane.active { display:flex; }
+
+#code-ta {
+  width:100%; height:100%; background:var(--ed-bg); color:var(--ed-text);
+  font-family:'Share Tech Mono',monospace; font-size:13px; line-height:1.85;
+  padding:16px 20px; border:none; outline:none; resize:none; tab-size:4;
+  caret-color:var(--g); transition:background .2s, color .2s; cursor:text;
+}
+#code-ta::selection { background:rgba(57,255,20,0.15); }
+
+/* test pane */
+#test-pane { flex:1; overflow-y:auto; padding:16px 20px; background:var(--ed-bg); transition:background .2s; }
+#test-pane::-webkit-scrollbar { width:4px; }
+#test-pane::-webkit-scrollbar-thumb { background:var(--g3); }
+.test-case { border:1px solid var(--ed-border); margin-bottom:10px; font-family:'DM Mono',monospace; font-size:11px; transition:border-color .2s; }
+.test-case-header { display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid var(--ed-border); background:rgba(57,255,20,0.03); }
+.test-num { color:var(--g3); font-size:9px; letter-spacing:.1em; }
+.test-status { font-size:9px; letter-spacing:.15em; text-transform:uppercase; margin-left:auto; }
+.test-status.pass { color:var(--g2); } .test-status.fail { color:#ff5555; } .test-status.pending { color:var(--muted); }
+.test-body { padding:10px 12px; }
+.test-row { display:flex; gap:8px; margin-bottom:4px; align-items:flex-start; }
+.test-row-label { color:var(--g3); font-size:9px; letter-spacing:.1em; min-width:60px; flex-shrink:0; padding-top:1px; }
+.test-row-val { color:var(--ed-text); font-size:11px; font-family:'Share Tech Mono',monospace; word-break:break-all; }
+.test-row-val.fail { color:#ff5555; } .test-row-val.pass { color:var(--g2); }
+
+/* run bar */
+#run-bar { display:flex; align-items:center; gap:10px; padding:0 16px; height:44px; flex-shrink:0; border-top:1px solid var(--ed-border); background:rgba(0,0,0,0.75); transition:border-color .2s; }
+.btn-run { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; padding:8px 20px; border:1px solid var(--g); color:var(--g); background:transparent; cursor:none; transition:all .15s; }
+.btn-run:hover { background:var(--g); color:#000; }
+.btn-run:disabled { opacity:.4; pointer-events:none; }
+.btn-test { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; padding:8px 16px; border:1px solid rgba(57,255,20,0.3); color:var(--g2); background:transparent; cursor:none; transition:all .15s; }
+.btn-test:hover { border-color:var(--g); color:var(--g); }
+.btn-test:disabled { opacity:.4; pointer-events:none; }
+.btn-clr { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.2em; text-transform:uppercase; padding:8px 14px; border:1px solid var(--border); color:var(--muted); background:transparent; cursor:none; transition:all .15s; }
+.btn-clr:hover { border-color:var(--g3); color:var(--text); }
+.py-status { font-family:'DM Mono',monospace; font-size:9px; color:var(--g3); letter-spacing:.15em; margin-left:auto; }
+.py-status b { color:var(--g2); font-weight:400; }
+#score-badge { font-family:'Orbitron',sans-serif; font-size:12px; font-weight:700; color:var(--g); border:1px solid rgba(57,255,20,0.3); padding:4px 10px; display:none; }
+
+/* output */
+#output-wrap { height:200px; flex-shrink:0; border-top:1px solid var(--ed-border); display:flex; flex-direction:column; background:var(--panel); transition:border-color .2s; }
+#output-wrap .pane-bar { background:rgba(0,0,0,0.4); border-bottom-color:var(--ed-border); }
+.output-pane { flex:1; overflow-y:auto; display:none; padding:14px 20px; font-family:'Share Tech Mono',monospace; font-size:12px; line-height:1.9; }
+.output-pane.active { display:block; }
+.output-pane::-webkit-scrollbar { width:4px; }
+.output-pane::-webkit-scrollbar-thumb { background:var(--g3); }
+.out-line { color:var(--ed-text); white-space:pre-wrap; word-break:break-all; transition:color .2s; }
+.out-err { color:#ff5555; white-space:pre-wrap; word-break:break-all; }
+.out-sys { color:var(--g3); font-style:italic; }
+.out-ok { color:var(--g2); }
+.out-prompt { color:var(--g); }
+#console-pane { background:rgba(0,0,0,0.2); }
+.console-line { font-family:'DM Mono',monospace; font-size:10px; line-height:1.8; color:#888; white-space:pre-wrap; }
+.console-line.err { color:#ff5555; } .console-line.warn { color:#ffcc00; } .console-line.info { color:var(--g3); }
+
+/* input row */
+.term-input-row { display:flex; align-items:center; border-top:1px solid rgba(57,255,20,0.1); background:rgba(57,255,20,0.03); padding:6px 0; animation:inputSlide .15s ease; }
+@keyframes inputSlide { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+.term-input-prompt { color:var(--g); font-family:'Share Tech Mono',monospace; font-size:12px; padding:0 8px; flex-shrink:0; }
+#term-input-field { flex:1; background:transparent; border:none; outline:none; color:var(--g); font-family:'Share Tech Mono',monospace; font-size:12px; caret-color:var(--g); padding:0; min-width:0; cursor:text; }
+
+/* ── RIGHT AI PANEL ── */
+#ai-panel { display:flex; flex-direction:column; background:var(--ai-bg); overflow:hidden; transition:background .2s; }
+#ai-header { display:flex; align-items:center; gap:5px; padding:0 12px; height:42px; flex-shrink:0; border-bottom:1px solid var(--ai-border); background:rgba(0,0,0,0.5); transition:border-color .2s; }
+.ai-title { font-family:'Orbitron',sans-serif; font-size:10px; font-weight:700; color:var(--g); letter-spacing:.1em; white-space:nowrap; margin-right:4px; }
+
+/* model selector */
+.model-selector { display:flex; gap:2px; }
+.model-btn { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.1em; text-transform:uppercase; padding:4px 8px; border:1px solid var(--ai-border); color:var(--muted); background:transparent; cursor:none; transition:all .15s; display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.model-btn:hover { color:var(--ai-text); border-color:var(--g3); }
+.model-btn.on { color:var(--g); border-color:rgba(57,255,20,0.4); background:rgba(57,255,20,0.06); }
+.model-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+.model-dot.groq   { background:#f55036; }
+.model-dot.claude { background:#bd93f9; }
+.model-dot.ollama { background:#ffb86c; }
+
+/* ollama dropdown */
+#ollama-cfg { margin-left:2px; display:none; }
+#ollama-model-input {
+  background:rgba(57,255,20,0.04); border:1px solid var(--ai-border);
+  color:var(--g); font-family:'Share Tech Mono',monospace; font-size:9px;
+  padding:3px 20px 3px 6px; outline:none; width:130px;
+  appearance:none; -webkit-appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5'%3E%3Cpath d='M0 0l4 5 4-5z' fill='%2339ff14'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 6px center; cursor:none;
+}
+#ollama-model-input option { background:#050e03; color:var(--g); }
+
+/* ai status */
+.ai-status { display:flex; align-items:center; gap:4px; font-family:'DM Mono',monospace; font-size:7px; color:var(--g3); letter-spacing:.1em; white-space:nowrap; flex-shrink:0; }
+.ai-status-dot { width:5px; height:5px; border-radius:50%; background:var(--g); animation:blink 1.4s step-end infinite; flex-shrink:0; }
+
+/* ai light toggle */
+.ai-lm-toggle { margin-left:auto; display:flex; align-items:center; gap:4px; flex-shrink:0; }
+.ai-lm-label { font-family:'DM Mono',monospace; font-size:7px; color:var(--g3); letter-spacing:.1em; white-space:nowrap; }
+
+/* mode tabs */
+#ai-modes { display:grid; grid-template-columns:1fr 1fr 1fr; border-bottom:1px solid var(--ai-border); flex-shrink:0; transition:border-color .2s; }
+.ai-mode { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.1em; text-transform:uppercase; padding:8px 0; text-align:center; color:var(--muted); border-right:1px solid var(--ai-border); cursor:none; transition:all .15s; background:transparent; border-top:none; border-bottom:none; border-left:none; }
+.ai-mode:last-child { border-right:none; }
+.ai-mode:hover { color:var(--ai-text); background:rgba(57,255,20,0.03); }
+.ai-mode.on { color:var(--g); background:rgba(57,255,20,0.06); }
+#mode-desc { padding:5px 12px; border-bottom:1px solid var(--ai-border); flex-shrink:0; background:rgba(57,255,20,0.02); }
+.mode-desc-text { font-family:'DM Mono',monospace; font-size:9px; color:var(--g3); letter-spacing:.04em; line-height:1.5; }
+
+/* chat */
+#chat { flex:1; overflow-y:auto; padding:12px; display:flex; flex-direction:column; gap:10px; }
+#chat::-webkit-scrollbar { width:3px; }
+#chat::-webkit-scrollbar-thumb { background:var(--g3); }
+.msg { display:flex; flex-direction:column; gap:3px; }
+.msg-who { font-family:'DM Mono',monospace; font-size:7px; letter-spacing:.2em; text-transform:uppercase; }
+.msg-who.user { color:var(--g3); } .msg-who.ai { color:var(--g2); }
+.msg-body { font-family:'DM Mono',monospace; font-size:11px; line-height:1.75; letter-spacing:.03em; padding:8px 10px; border:1px solid var(--ai-border); transition:border-color .2s, background .2s, color .2s; }
+.msg-body.user { color:var(--ai-text); background:rgba(57,255,20,0.03); border-color:rgba(57,255,20,0.1); align-self:flex-end; max-width:90%; }
+.msg-body.ai { color:var(--ai-text); background:var(--ai-msg-bg); }
+.msg-body.ai code { background:rgba(57,255,20,0.1); color:var(--g); padding:1px 4px; font-family:'Share Tech Mono',monospace; font-size:10px; }
+.msg-body.ai pre { background:rgba(57,255,20,0.05); border:1px solid var(--ai-border); padding:8px; margin:6px 0; overflow-x:auto; font-size:10px; line-height:1.65; color:var(--g2); font-family:'Share Tech Mono',monospace; white-space:pre; }
+.typing-indicator { display:flex; gap:4px; align-items:center; padding:8px 10px; border:1px solid var(--ai-border); background:var(--ai-msg-bg); width:fit-content; }
+.typing-dot { width:5px; height:5px; border-radius:50%; background:var(--g); animation:tdot 1.2s ease-in-out infinite; }
+.typing-dot:nth-child(2) { animation-delay:.2s; } .typing-dot:nth-child(3) { animation-delay:.4s; }
+@keyframes tdot { 0%,80%,100%{opacity:.2;transform:scale(.8)} 40%{opacity:1;transform:scale(1)} }
+
+/* quick prompts */
+#quick-prompts { padding:8px 10px; border-top:1px solid var(--ai-border); display:flex; flex-wrap:wrap; gap:5px; flex-shrink:0; background:rgba(0,0,0,0.2); transition:border-color .2s; }
+.quick-btn { font-family:'DM Mono',monospace; font-size:8px; letter-spacing:.08em; text-transform:uppercase; padding:4px 9px; border:1px solid var(--ai-border); color:var(--muted); background:transparent; cursor:none; transition:all .15s; }
+.quick-btn:hover { border-color:var(--g3); color:var(--g); }
+
+/* ai input */
+#ai-input-wrap { padding:10px 12px; border-top:1px solid var(--ai-border); display:flex; gap:8px; flex-shrink:0; background:rgba(0,0,0,0.4); transition:border-color .2s; }
+#ai-input { flex:1; background:rgba(57,255,20,0.03); border:1px solid var(--ai-border); color:var(--ai-text); font-family:'Share Tech Mono',monospace; font-size:11px; padding:7px 10px; outline:none; resize:none; line-height:1.5; height:54px; transition:border-color .15s, color .2s; cursor:text; }
+#ai-input:focus { border-color:rgba(57,255,20,0.35); }
+#ai-input::placeholder { color:var(--muted); }
+#send-btn { font-family:'DM Mono',monospace; font-size:9px; letter-spacing:.15em; text-transform:uppercase; padding:0 12px; border:1px solid var(--g); color:var(--g); background:transparent; cursor:none; transition:all .15s; align-self:flex-end; height:32px; }
+#send-btn:hover { background:var(--g); color:#000; }
+#send-btn:disabled { opacity:.3; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<div id="scan"></div>
+<div id="cur"></div>
+<canvas id="gc"></canvas>
+
+<nav>
+  <a class="logo" href="index.html">PYDUDE<sup>beta</sup></a>
+  <div class="nav-tabs">
+    <a class="nav-tab" href="index.html">Home</a>
+    <a class="nav-tab on" href="#">Playground</a>
+    <a class="nav-tab" href="challenges.html">Challenges</a>
+    <a class="nav-tab" href="docs.html">Docs</a>
+    <a class="nav-tab gate-link" href="comm.html">Community</a>
+
+  </div>
+  <div class="nav-right">
+    <div class="sys-badge">ENV <b>Python 3.12 · Pyodide</b></div>
+    <div class="blink-dot"></div>
+  </div>
+</nav>
+
+<div id="app">
+
+  <!-- LEFT -->
+  <div id="left">
+    <div id="challenge-bar">
+      <span class="ch-label">challenge</span>
+      <span id="ch-title-text">Free Play</span>
+      <span class="ch-diff easy" id="ch-diff-badge" style="display:none">easy</span>
+      <div class="lm-toggle" title="Editor light mode">
+        <span class="lm-label">light</span>
+        <label class="toggle-sw">
+          <input type="checkbox" id="ed-light-tog">
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="pane-bar">
+      <div class="pane-tab-item active" id="tab-sol">solution.py</div>
+      <div class="pane-tab-item" id="tab-test">test.py</div>
+      <div class="pane-actions">
+        <div class="ctrl r"></div><div class="ctrl y"></div><div class="ctrl g"></div>
+      </div>
+    </div>
+
+    <div class="editor-pane active" id="pane-sol">
+      <textarea id="code-ta" spellcheck="false"></textarea>
+    </div>
+
+    <div class="editor-pane" id="pane-test">
+      <div id="test-pane">
+        <div id="no-tests-msg" style="font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:.06em;line-height:1.8">
+          No test cases — select a challenge to load tests.
+        </div>
+        <div id="test-cases-list"></div>
+      </div>
+    </div>
+
+    <div id="run-bar">
+      <button class="btn-run" id="run-btn" disabled>▶ RUN</button>
+      <button class="btn-test" id="test-btn" disabled style="display:none">✓ TEST</button>
+      <button class="btn-clr" id="clr-btn">CLR</button>
+      <div id="score-badge"></div>
+      <span class="py-status" id="py-status">loading<span id="py-dots">...</span></span>
+    </div>
+
+    <div id="output-wrap">
+      <div class="pane-bar">
+        <div class="pane-tab-item active" id="tab-out">output</div>
+        <div class="pane-tab-item" id="tab-con">console</div>
+      </div>
+      <div class="output-pane active" id="output">
+        <span class="out-sys">// Python runtime loading...</span>
+      </div>
+      <div class="output-pane" id="console-pane">
+        <div class="console-line info">// stderr and system messages appear here</div>
+      </div>
+      <div class="term-input-row" id="term-input-row" style="display:none">
+        <span class="term-input-prompt">›</span>
+        <input id="term-input-field" type="text" autocomplete="off" spellcheck="false" placeholder="type and press Enter">
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT AI -->
+  <div id="ai-panel">
+    <div id="ai-header">
+      <div class="ai-title">AI</div>
+      <div class="model-selector">
+        <button class="model-btn on" data-model="groq"><span class="model-dot groq"></span>GROQ</button>
+        <button class="model-btn" data-model="claude"><span class="model-dot claude"></span>CLAUDE</button>
+        <button class="model-btn" data-model="ollama"><span class="model-dot ollama"></span>OLLAMA</button>
+      </div>
+      <div id="ollama-cfg">
+        <select id="ollama-model-input"><option value="">loading...</option></select>
+      </div>
+      <div class="ai-status">
+        <span class="ai-status-dot" id="ai-dot"></span>
+        <span id="ai-status-text">groq · free</span>
+      </div>
+      <div class="ai-lm-toggle" title="AI panel light mode">
+        <span class="ai-lm-label">light</span>
+        <label class="toggle-sw">
+          <input type="checkbox" id="ai-light-tog">
+          <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        </label>
+      </div>
+    </div>
+
+    <div id="ai-modes">
+      <button class="ai-mode on" data-mode="hint">Hint</button>
+      <button class="ai-mode" data-mode="review">Review</button>
+      <button class="ai-mode" data-mode="chat">Chat</button>
+    </div>
+    <div id="mode-desc">
+      <div class="mode-desc-text" id="mode-desc-text">Nudges you without spoiling the answer. Use when stuck.</div>
+    </div>
+
+    <div id="chat">
+      <div class="msg">
+        <div class="msg-who ai">// AI</div>
+        <div class="msg-body ai">Hey! Pick Hint, Review, or Chat above. I see your code and output in real time.</div>
+      </div>
+    </div>
+
+    <div id="quick-prompts">
+      <button class="quick-btn" data-q="Give me a hint without spoiling the answer.">+ hint</button>
+      <button class="quick-btn" data-q="Explain what my code is doing step by step.">- explain</button>
+      <button class="quick-btn" data-q="What edge cases am I missing?">. edge cases</button>
+      <button class="quick-btn" data-q="Review my code for style and efficiency.">+ review</button>
+      <button class="quick-btn" data-q="Why is my output wrong?">- debug</button>
+      <button class="quick-btn" data-q="What is the time and space complexity?">. complexity</button>
+    </div>
+
+    <div id="ai-input-wrap">
+      <textarea id="ai-input" placeholder="ask about your code...&#10;Enter = send · Shift+Enter = new line"></textarea>
+      <button id="send-btn">SEND</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// PIXEL GRID — hover only
+// ═══════════════════════════════════════════════
+(function(){
+  const gc = document.getElementById('gc');
+  const ctx = gc.getContext('2d');
+  const CELL = 26;
+  const SYMS = ['+','-','.','+','.','+','-','.'];
+  let W, H, cols, rows, blocks;
+
+  function resize() {
+    W = gc.width = window.innerWidth;
+    H = gc.height = window.innerHeight;
+    cols = Math.ceil(W/CELL)+1;
+    rows = Math.ceil(H/CELL)+1;
+    blocks = [];
+    for (let r=0; r<rows; r++)
+      for (let c=0; c<cols; c++)
+        blocks.push({ x:c*CELL, y:r*CELL, sym:SYMS[(r*5+c*3)%SYMS.length], bri:0, tgt:0 });
+  }
+
+  document.addEventListener('mousemove', e => {
+    const mx = e.clientX, my = e.clientY;
+    blocks.forEach(b => {
+      const d = Math.hypot(b.x+CELL*.5-mx, b.y+CELL*.5-my);
+      b.tgt = d < 90 ? Math.pow(1-d/90, 1.7) : 0;
+    });
+  });
+  document.addEventListener('mouseleave', () => blocks.forEach(b => b.tgt=0));
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    blocks.forEach(b => {
+      b.bri += (b.tgt - b.bri) * 0.13;
+      const v = b.bri;
+      if (v < 0.015) return;
+      const px=b.x, py=b.y, pad=3, bw=CELL-pad*2, bh=CELL-pad*2;
+      const lum = Math.floor(v*255);
+      ctx.fillStyle = `rgb(${lum},${lum},${lum})`;
+      ctx.fillRect(px+pad, py+pad, bw, bh);
+      const ba = v<0.6 ? v*.85 : (1-v)*.85;
+      ctx.strokeStyle = `rgba(57,255,20,${ba})`;
+      ctx.lineWidth = 0.7;
+      ctx.strokeRect(px+pad+.5, py+pad+.5, bw-1, bh-1);
+      ctx.fillStyle = v>0.55
+        ? `rgba(${Math.floor((1-v)*60)},${Math.floor((1-v)*60)},${Math.floor((1-v)*60)},0.7)`
+        : `rgba(57,255,20,${v*.9+.08})`;
+      ctx.font = `${b.sym==='.'?9:10}px 'Share Tech Mono',monospace`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillText(b.sym, px+CELL*.5, py+CELL*.5);
+    });
+    requestAnimationFrame(draw);
+  }
+  window.addEventListener('resize', resize);
+  resize(); draw();
+})();
+
+// ═══════════════════════════════════════════════
+// CURSOR
+// ═══════════════════════════════════════════════
+(function(){
+  const cur = document.getElementById('cur');
+  document.addEventListener('mousemove', e => {
+    cur.style.left = e.clientX + 'px';
+    cur.style.top  = e.clientY + 'px';
+  });
+  function addHover(sel) {
+    document.querySelectorAll(sel).forEach(el => {
+      el.addEventListener('mouseenter', () => cur.classList.add('act'));
+      el.addEventListener('mouseleave', () => cur.classList.remove('act'));
+    });
+  }
+  addHover('button, a, select, .pane-tab-item, .quick-btn, .model-btn, .toggle-sw');
+})();
+
+// ═══════════════════════════════════════════════
+// LIGHT MODE TOGGLES
+// ═══════════════════════════════════════════════
+document.getElementById('ed-light-tog').addEventListener('change', e => {
+  document.body.classList.toggle('ed-light', e.target.checked);
+});
+document.getElementById('ai-light-tog').addEventListener('change', e => {
+  document.body.classList.toggle('ai-light', e.target.checked);
+});
+
+// ═══════════════════════════════════════════════
+// EDITOR PANE TABS
+// ═══════════════════════════════════════════════
+document.getElementById('tab-sol').addEventListener('click', () => {
+  document.getElementById('tab-sol').classList.add('active');
+  document.getElementById('tab-test').classList.remove('active');
+  document.getElementById('pane-sol').classList.add('active');
+  document.getElementById('pane-test').classList.remove('active');
+});
+document.getElementById('tab-test').addEventListener('click', () => {
+  document.getElementById('tab-test').classList.add('active');
+  document.getElementById('tab-sol').classList.remove('active');
+  document.getElementById('pane-test').classList.add('active');
+  document.getElementById('pane-sol').classList.remove('active');
+});
+
+// ═══════════════════════════════════════════════
+// OUTPUT TABS
+// ═══════════════════════════════════════════════
+document.getElementById('tab-out').addEventListener('click', () => {
+  document.getElementById('tab-out').classList.add('active');
+  document.getElementById('tab-con').classList.remove('active');
+  document.getElementById('output').classList.add('active');
+  document.getElementById('console-pane').classList.remove('active');
+});
+document.getElementById('tab-con').addEventListener('click', () => {
+  document.getElementById('tab-con').classList.add('active');
+  document.getElementById('tab-out').classList.remove('active');
+  document.getElementById('console-pane').classList.add('active');
+  document.getElementById('output').classList.remove('active');
+});
+
+// ═══════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+const outputEl = document.getElementById('output');
+const consolePaneEl = document.getElementById('console-pane');
+
+function appendOutput(html) {
+  outputEl.innerHTML += html;
+  outputEl.scrollTop = outputEl.scrollHeight;
+}
+function clearOutput() { outputEl.innerHTML = ''; }
+
+function addConsole(msg, type='info') {
+  const d = document.createElement('div');
+  d.className = 'console-line ' + type;
+  d.textContent = '[' + new Date().toLocaleTimeString() + '] ' + msg;
+  consolePaneEl.appendChild(d);
+  consolePaneEl.scrollTop = consolePaneEl.scrollHeight;
+}
+
+// ═══════════════════════════════════════════════
+// CODE EDITOR
+// ═══════════════════════════════════════════════
+const codeTA = document.getElementById('code-ta');
+codeTA.value = `# Welcome to PYDUDE Playground\n# Write Python code and press RUN\n# Go to Challenges to load a problem\n\ndef greet(name):\n    return f"Hello, {name}!"\n\nprint(greet("dude"))\n`;
+
+codeTA.addEventListener('keydown', e => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    const s = codeTA.selectionStart, en = codeTA.selectionEnd;
+    codeTA.value = codeTA.value.substring(0,s) + '    ' + codeTA.value.substring(en);
+    codeTA.selectionStart = codeTA.selectionEnd = s + 4;
+  }
+});
+
+// ═══════════════════════════════════════════════
+// PYODIDE
+// ═══════════════════════════════════════════════
+let pyodide = null;
+const runBtn  = document.getElementById('run-btn');
+const testBtn = document.getElementById('test-btn');
+const pyStatusEl = document.getElementById('py-status');
+const pyDotsEl   = document.getElementById('py-dots');
+let dotCount = 0;
+const dotTimer = setInterval(() => {
+  dotCount = (dotCount+1)%4;
+  pyDotsEl.textContent = '.'.repeat(dotCount+1);
+}, 400);
+
+async function initPy() {
+  try {
+    pyodide = await loadPyodide();
+    clearInterval(dotTimer);
+    pyStatusEl.innerHTML = '<b>Python 3.12 ready</b>';
+    runBtn.disabled = false;
+    appendOutput('<span class="out-ok">// Python 3.12 loaded ✓</span>\n');
+    appendOutput('<span class="out-sys">// ready · select a challenge or write free code</span>\n');
+    addConsole('Pyodide 0.26 ready', 'info');
+  } catch(e) {
+    clearInterval(dotTimer);
+    pyStatusEl.textContent = 'error';
+    appendOutput(`<span class="out-err">// Pyodide failed: ${esc(e.message)}</span>\n`);
+  }
+}
+initPy();
+
+// ═══════════════════════════════════════════════
+// INPUT SYSTEM
+// ═══════════════════════════════════════════════
+const termInputRow   = document.getElementById('term-input-row');
+const termInputField = document.getElementById('term-input-field');
+let inputResolve = null;
+
+function waitForInput() {
+  return new Promise(resolve => {
+    inputResolve = resolve;
+    termInputRow.style.display = 'flex';
+    termInputField.value = '';
+    termInputField.focus();
+    outputEl.scrollTop = outputEl.scrollHeight;
+  });
+}
+
+termInputField.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && inputResolve) {
+    const val = termInputField.value;
+    termInputRow.style.display = 'none';
+    termInputField.value = '';
+    const res = inputResolve;
+    inputResolve = null;
+    appendOutput(`<span class="out-ok">${esc(val)}</span>\n`);
+    res(val);
+  }
+});
+
+function countInputs(code) {
+  return (code.replace(/#[^\n]*/g,'').match(/\binput\s*\(/g) || []).length;
+}
+
+function extractPrompts(code) {
+  const prompts = [];
+  const re = /input\s*\(\s*(?:f?["'])(.*?)(?:["'])\s*\)/g;
+  let m;
+  while ((m = re.exec(code)) !== null)
+    prompts.push(m[1].replace(/\{[^}]*\}/g, '...'));
+  const n = countInputs(code);
+  while (prompts.length < n) prompts.push(`input [${prompts.length+1}/${n}]: `);
+  return prompts;
+}
+
+async function collectInputs(code) {
+  const prompts = extractPrompts(code);
+  if (!prompts.length) return [];
+  appendOutput(`<span class="out-sys">// ${prompts.length} input() call${prompts.length>1?'s':''} detected\n\n</span>`);
+  const vals = [];
+  for (const p of prompts) {
+    appendOutput(`<span class="out-line">${esc(p)}</span>`);
+    vals.push(await waitForInput());
+  }
+  appendOutput(`<span class="out-sys">\n// running...\n\n</span>`);
+  return vals;
+}
+
+// ═══════════════════════════════════════════════
+// RUN
+// ═══════════════════════════════════════════════
+let lastOutput = '';
+
+async function runCode(code) {
+  if (!pyodide) return;
+  clearOutput();
+  appendOutput('<span class="out-prompt">$</span> <span class="out-sys">python solution.py</span>\n\n');
+
+  const vals = await collectInputs(code);
+  pyodide.globals.set('_input_values', pyodide.toPy(vals));
+  await pyodide.runPythonAsync(`
+import builtins
+def _input(prompt=''):
+    if not _input_values: raise EOFError("No more input values.")
+    return _input_values.pop(0)
+builtins.input = _input
+`);
+
+  let accOut = '', accErr = '';
+  pyodide.setStdout({ batched: s => {
+    accOut += s + '\n';
+    s.split('\n').forEach(l => { if(l!=='') appendOutput(`<span class="out-line">${esc(l)}</span>\n`); });
+  }});
+  pyodide.setStderr({ batched: s => {
+    accErr += s + '\n';
+    addConsole(s.trim(), 'err');
+  }});
+
+  try {
+    await pyodide.runPythonAsync(code);
+    lastOutput = accOut;
+    if (!accOut && !accErr) appendOutput('<span class="out-sys">// (no output)</span>\n');
+    if (accErr) {
+      lastOutput += '\nERRORS:\n' + accErr;
+      appendOutput('\n');
+      accErr.trim().split('\n').forEach(l => appendOutput(`<span class="out-err">${esc(l)}</span>\n`));
+    }
+  } catch(e) {
+    termInputRow.style.display = 'none'; inputResolve = null;
+    lastOutput = 'ERROR: ' + e.message;
+    addConsole(e.message, 'err');
+    e.message.split('\n').slice(-3).forEach(l => appendOutput(`<span class="out-err">${esc(l)}</span>\n`));
+  }
+  appendOutput('\n<span class="out-sys">// ─── done ───</span>');
+}
+
+runBtn.addEventListener('click', async () => {
+  runBtn.disabled = true; testBtn.disabled = true;
+  await runCode(codeTA.value);
+  runBtn.disabled = false;
+  if (currentChallenge) testBtn.disabled = false;
+});
+
+document.getElementById('clr-btn').addEventListener('click', () => {
+  clearOutput();
+  appendOutput('<span class="out-sys">// cleared</span>');
+});
+
+// ═══════════════════════════════════════════════
+// CHALLENGE LOADING
+// ═══════════════════════════════════════════════
+let currentChallenge = null;
+let challenges = [];
+
+async function loadChallenges() {
+  try {
+    const r = await fetch('challenges.json');
+    challenges = await r.json();
+    const prog = JSON.parse(localStorage.getItem('pydude_progress') || '{}');
+    challenges.forEach(ch => {
+      if (prog[ch.id]) { ch.score = prog[ch.id].score||0; ch.solved = prog[ch.id].solved||false; }
+    });
+  } catch(e) {
+    addConsole('Could not load challenges.json — free play mode', 'warn');
+  }
+}
+
+function loadChallenge(id) {
+  const ch = challenges.find(c => c.id == id);
+  if (!ch) return;
+  currentChallenge = ch;
+  document.getElementById('ch-title-text').textContent = `#${String(ch.id).padStart(3,'0')} — ${ch.title}`;
+  const badge = document.getElementById('ch-diff-badge');
+  badge.textContent = ch.difficulty; badge.className = 'ch-diff '+ch.difficulty; badge.style.display='';
+  document.title = `PYDUDE — ${ch.title}`;
+  codeTA.value = ch.starter;
+  testBtn.style.display = ''; if(pyodide) testBtn.disabled = false;
+  renderTestCases(ch.tests);
+  addConsole(`Loaded: ${ch.title} (${ch.difficulty})`, 'info');
+}
+
+function renderTestCases(tests) {
+  document.getElementById('no-tests-msg').style.display = 'none';
+  const list = document.getElementById('test-cases-list');
+  list.innerHTML = '';
+  tests.forEach((t, i) => {
+    const div = document.createElement('div');
+    div.className = 'test-case'; div.id = 'tc-'+i;
+    div.innerHTML = `
+      <div class="test-case-header">
+        <span class="test-num">TEST ${String(i+1).padStart(2,'0')}</span>
+        <span class="test-status pending" id="ts-${i}">PENDING</span>
+      </div>
+      <div class="test-body">
+        <div class="test-row"><span class="test-row-label">call</span><span class="test-row-val">${esc(t.fn)}</span></div>
+        <div class="test-row"><span class="test-row-label">expected</span><span class="test-row-val">${esc(t.expected)}</span></div>
+        <div class="test-row" id="tgr-${i}" style="display:none"><span class="test-row-label">got</span><span class="test-row-val" id="tg-${i}"></span></div>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// TEST RUNNER
+// ═══════════════════════════════════════════════
+testBtn.addEventListener('click', async () => {
+  if (!pyodide || !currentChallenge) return;
+  runBtn.disabled = true; testBtn.disabled = true;
+  document.getElementById('tab-test').click();
+
+  const ch = currentChallenge;
+  clearOutput();
+  appendOutput('<span class="out-prompt">$</span> <span class="out-sys">running tests...</span>\n\n');
+
+  ch.tests.forEach((_,i) => {
+    document.getElementById('ts-'+i).textContent='RUNNING';
+    document.getElementById('ts-'+i).className='test-status pending';
+    document.getElementById('tgr-'+i).style.display='none';
+  });
+
+  // load user code silently
+  try {
+    pyodide.setStdout({batched:()=>{}});
+    pyodide.setStderr({batched:s=>addConsole(s,'err')});
+    await pyodide.runPythonAsync(codeTA.value);
+  } catch(e) {
+    appendOutput(`<span class="out-err">// Fix code errors before testing:\n${esc(e.message)}</span>\n`);
+    runBtn.disabled=false; testBtn.disabled=false; return;
+  }
+
+  let passed = 0;
+  for (let i=0; i<ch.tests.length; i++) {
+    const t = ch.tests[i];
+    let got='', ok=false;
+    try {
+      const res = await pyodide.runPythonAsync(t.fn);
+      got = String(res);
+      ok = got.trim() === t.expected.trim();
+    } catch(e) {
+      got = 'ERROR: ' + e.message.split('\n').pop();
+    }
+    appendOutput(`<span class="${ok?'out-ok':'out-err'}">${ok?'✓':'✗'} TEST ${i+1}: ${esc(t.fn)}</span>\n`);
+    if(!ok) appendOutput(`  <span class="out-sys">expected ${esc(t.expected)}, got ${esc(got)}</span>\n`);
+
+    document.getElementById('ts-'+i).textContent=ok?'PASS':'FAIL';
+    document.getElementById('ts-'+i).className='test-status '+(ok?'pass':'fail');
+    document.getElementById('tg-'+i).textContent=got;
+    document.getElementById('tg-'+i).className='test-row-val '+(ok?'pass':'fail');
+    document.getElementById('tgr-'+i).style.display='';
+    if(ok) passed++;
+  }
+
+  const score = Math.round((passed/ch.tests.length)*100);
+  const solved = passed===ch.tests.length;
+  const prog = JSON.parse(localStorage.getItem('pydude_progress')||'{}');
+  prog[ch.id] = { score:Math.max(score,prog[ch.id]?.score||0), solved:solved||(prog[ch.id]?.solved||false) };
+  localStorage.setItem('pydude_progress', JSON.stringify(prog));
+  ch.score=prog[ch.id].score; ch.solved=prog[ch.id].solved;
+
+  const badge = document.getElementById('score-badge');
+  badge.textContent=score+'/100'; badge.style.display='';
+  badge.style.color=score===100?'var(--g)':score>=50?'#ffcc00':'#ff5555';
+  badge.style.borderColor=score===100?'rgba(57,255,20,0.5)':score>=50?'rgba(255,204,0,0.5)':'rgba(255,85,85,0.5)';
+
+  appendOutput(`\n<span class="${solved?'out-ok':'out-err'}">${passed}/${ch.tests.length} passed · ${score}/100</span>`);
+  if(solved) appendOutput('\n<span class="out-ok">// ✓ SOLVED!</span>');
+  appendOutput('\n<span class="out-sys">// ─── tests done ───</span>');
+  lastOutput = `${passed}/${ch.tests.length} tests, score ${score}/100`;
+  runBtn.disabled=false; testBtn.disabled=false;
+});
+
+// ═══════════════════════════════════════════════
+// AI — MODEL SELECTOR
+// ═══════════════════════════════════════════════
+let activeModel = 'groq';
+const ollamaCfg    = document.getElementById('ollama-cfg');
+const ollamaSelect = document.getElementById('ollama-model-input');
+const aiDot        = document.getElementById('ai-dot');
+const aiStatusText = document.getElementById('ai-status-text');
+
+function setStatus(text, loading) {
+  aiStatusText.textContent = text;
+  aiDot.style.background = loading ? '#ffcc00' : 'var(--g)';
+  aiDot.style.animation  = loading ? 'none' : 'blink 1.4s step-end infinite';
+}
+
+document.querySelectorAll('.model-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    activeModel = btn.dataset.model;
+    ollamaCfg.style.display = activeModel === 'ollama' ? 'block' : 'none';
+    const labels = { groq:'groq · free', claude:'claude · api', ollama:'ollama · local' };
+    setStatus(labels[activeModel] || 'ready', false);
+    if (activeModel === 'ollama') testOllama();
+  });
+});
+
+async function testOllama() {
+  setStatus('connecting...', true);
+  try {
+    const r = await fetch('http://localhost:11434/api/tags', { signal: AbortSignal.timeout(4000) });
+    if (r.ok) {
+      const data = await r.json();
+      const models = data.models || [];
+      ollamaSelect.innerHTML = '';
+      if (!models.length) {
+        ollamaSelect.innerHTML = '<option value="">no models</option>';
+      } else {
+        models.forEach(m => {
+          const o = document.createElement('option');
+          o.value = m.name; o.textContent = m.name;
+          if (m.name.includes('qwen3.5')) o.selected = true;
+          ollamaSelect.appendChild(o);
+        });
+      }
+      setStatus(`ollama · ${models.length} model${models.length !== 1 ? 's' : ''}`, false);
+      aiDot.style.background = 'var(--g)';
+    }
+  } catch(e) {
+    setStatus('ollama · offline', false);
+    aiDot.style.background = '#ff5555';
+    appendMsg('ai', e instanceof TypeError
+      ? `CORS blocked. Run in PowerShell:\n\`\`\`\n$env:OLLAMA_ORIGINS="*"; ollama serve\n\`\`\``
+      : `Ollama not found.\n\`\`\`\nollama serve\n\`\`\``);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// AI — MODES
+// ═══════════════════════════════════════════════
+const MODE_DESC = {
+  hint:   'Nudges you without spoiling the answer. Use when stuck.',
+  review: 'Full code review — correctness, complexity, style, edge cases.',
+  chat:   'Open Q&A about your code or Python concepts.'
+};
+const MODE_SYS = {
+  hint:   'You are a Python coding assistant inside PYDUDE. Give HINTS ONLY — never the full solution. Be concise and terse. Max 80 words.',
+  review: 'You are a Python code reviewer inside PYDUDE. Give detailed feedback: correctness, time/space complexity, Pythonic style, edge cases. Be direct and technical.',
+  chat:   'You are a Python expert tutor inside PYDUDE, a retro terminal platform. Answer clearly and concisely. Use code examples when helpful.'
+};
+let activeMode = 'hint';
+
+document.querySelectorAll('.ai-mode').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.ai-mode').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    activeMode = btn.dataset.mode;
+    document.getElementById('mode-desc-text').textContent = MODE_DESC[activeMode];
+    if (activeMode === 'hint')   sendToAI('Give me a hint based on my current code.');
+    if (activeMode === 'review') sendToAI('Review my current code — correctness, style, complexity.');
+  });
+});
+
+// ═══════════════════════════════════════════════
+// AI — CHAT HELPERS
+// ═══════════════════════════════════════════════
+const chatEl  = document.getElementById('chat');
+const aiInput = document.getElementById('ai-input');
+const sendBtn = document.getElementById('send-btn');
+
+function getSystemPrompt() {
+  const code = codeTA.value || '(no code)';
+  const out  = lastOutput   || '(not run yet)';
+  const chCtx = currentChallenge
+    ? `Challenge: ${currentChallenge.title} (${currentChallenge.difficulty})\n${currentChallenge.description}\n`
+    : 'Free play mode — no specific challenge loaded.\n';
+  return `${MODE_SYS[activeMode]}\n\n${chCtx}\nCurrent code:\n\`\`\`python\n${code}\n\`\`\`\nLast output: ${out}\n\nUse markdown code blocks for code. Under 200 words unless review was asked.`;
+}
+
+function appendMsg(who, text) {
+  const d = document.createElement('div');
+  d.className = 'msg';
+  d.innerHTML = `<div class="msg-who ${who}">${who === 'ai' ? '// AI' : '// YOU'}</div><div class="msg-body ${who}">${formatAI(text)}</div>`;
+  chatEl.appendChild(d);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+
+function formatAI(text) {
+  return esc(text)
+    .replace(/```[\w]*\n?([\s\S]*?)```/g, (_, c) => `<pre>${c}</pre>`)
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/\n/g, '<br>');
+}
+
+function showTyping() {
+  const d = document.createElement('div');
+  d.className = 'msg'; d.id = 'typing-msg';
+  d.innerHTML = `<div class="msg-who ai">// AI</div><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  chatEl.appendChild(d);
+  chatEl.scrollTop = chatEl.scrollHeight;
+}
+function removeTyping() { const t = document.getElementById('typing-msg'); if(t) t.remove(); }
+function stripThink(t)  { return t.replace(/<think>[\s\S]*?<\/think>/gi, '').trim(); }
+
+// ═══════════════════════════════════════════════
+// AI — GROQ (default, free)
+// Free key from: console.groq.com → API Keys
+// ═══════════════════════════════════════════════
+const GROQ_KEY = 'da_key';
+
+async function sendToGroq(msg) {
+  setStatus('groq · thinking...', true);
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${GROQ_KEY}`
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 800,
+      temperature: 0.7,
+      messages: [
+        { role: 'system', content: getSystemPrompt() },
+        { role: 'user',   content: msg }
+      ]
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    setStatus('groq · error', false); aiDot.style.background = '#ff5555';
+    throw new Error(err?.error?.message || `Groq ${res.status}`);
+  }
+  const data = await res.json();
+  setStatus('groq · free', false); aiDot.style.background = 'var(--g)';
+  const text = data?.choices?.[0]?.message?.content || '';
+  if (!text) throw new Error('Empty response from Groq');
+  return stripThink(text);
+}
+
+// ═══════════════════════════════════════════════
+// AI — CLAUDE HAIKU (paid fallback)
+// ═══════════════════════════════════════════════
+async function sendToClaude(msg) {
+  setStatus('claude · thinking...', true);
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 800,
+      system: getSystemPrompt(),
+      messages: [{ role: 'user', content: msg }]
+    })
+  });
+  const data = await res.json();
+  setStatus('claude · api', false);
+  if (data.content?.[0]) return data.content[0].text;
+  throw new Error(data.error?.message || 'No response from Claude');
+}
+
+// ═══════════════════════════════════════════════
+// AI — OLLAMA (local)
+// ═══════════════════════════════════════════════
+async function sendToOllama(msg) {
+  const model = ollamaSelect.value || 'qwen3.5:latest';
+  setStatus(`${model} · thinking...`, true);
+  let res;
+  try {
+    res = await fetch('http://localhost:11434/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model, stream: false,
+        options: { num_predict: 512 },
+        messages: [
+          { role: 'system', content: getSystemPrompt() },
+          { role: 'user',   content: `/no_think ${msg}` }
+        ]
+      })
+    });
+  } catch(e) {
+    setStatus('ollama · offline', false); aiDot.style.background = '#ff5555';
+    throw new Error(e instanceof TypeError
+      ? `CORS blocked.\n$env:OLLAMA_ORIGINS="*"; ollama serve`
+      : `Cannot reach Ollama: ${e.message}`);
+  }
+  if (!res.ok) throw new Error(`Ollama ${res.status}: ${res.statusText}`);
+  const data = await res.json();
+  setStatus(`ollama · ${model}`, false); aiDot.style.background = 'var(--g)';
+  const raw = data?.message?.content || data?.response || '';
+  if (!raw) throw new Error('Empty response from Ollama');
+  return stripThink(raw);
+}
+
+// ═══════════════════════════════════════════════
+// AI — DISPATCH
+// ═══════════════════════════════════════════════
+async function sendToAI(msg) {
+  sendBtn.disabled = true;
+  appendMsg('user', msg);
+  showTyping();
+  try {
+    let reply;
+    if      (activeModel === 'groq')   reply = await sendToGroq(msg);
+    else if (activeModel === 'claude') reply = await sendToClaude(msg);
+    else                               reply = await sendToOllama(msg);
+    removeTyping();
+    appendMsg('ai', reply);
+  } catch(e) {
+    removeTyping();
+    setStatus('error', false); aiDot.style.background = '#ff5555';
+    appendMsg('ai', `Error: ${e.message}`);
+  }
+  sendBtn.disabled = false;
+}
+
+sendBtn.addEventListener('click', () => {
+  const msg = aiInput.value.trim();
+  if (!msg) return;
+  aiInput.value = '';
+  sendToAI(msg);
+});
+aiInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBtn.click(); }
+});
+document.querySelectorAll('.quick-btn').forEach(b => {
+  b.addEventListener('click', () => sendToAI(b.dataset.q));
+});
+
+// ═══════════════════════════════════════════════
+// INIT — load challenges + URL param
+// ═══════════════════════════════════════════════
+async function init() {
+  await loadChallenges();
+  const id = new URLSearchParams(window.location.search).get('id');
+  if (id && challenges.length) loadChallenge(parseInt(id));
+}
+init();
+</script>
+</body>
+</html>

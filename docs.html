@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PYDUDE — Docs</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{--g:#39ff14;--g2:#22cc0a;--g3:#0d5c04;--g4:#071f02;--bg:#000;--text:#c8f5c0;--muted:#3a6e32;--panel:#050e03;--border:rgba(57,255,20,0.13);}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;cursor:none;min-height:100vh;display:flex;flex-direction:column;}
+#cur{position:fixed;pointer-events:none;z-index:9999;width:10px;height:10px;border:1.5px solid var(--g);transform:translate(-50%,-50%);transition:width .08s,height .08s,background .08s;}
+#cur.act{width:16px;height:16px;background:rgba(57,255,20,0.1);}
+#scan{position:fixed;inset:0;pointer-events:none;z-index:500;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px);}
+#gc{position:fixed;inset:0;z-index:0;pointer-events:none;}
+nav{position:fixed;inset:0 0 auto 0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:0 32px;height:50px;border-bottom:1px solid var(--border);background:rgba(0,0,0,0.88);backdrop-filter:blur(6px);}
+.logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:17px;color:var(--g);letter-spacing:.1em;text-decoration:none;}
+.logo sup{font-size:8px;color:var(--muted);font-family:'DM Mono',monospace;letter-spacing:.2em;vertical-align:super;margin-left:3px;}
+.nav-tabs{display:flex;gap:2px;}
+.nav-tab{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:6px 16px;border:1px solid transparent;color:var(--muted);text-decoration:none;transition:all .15s;cursor:none;}
+.nav-tab:hover,.nav-tab.on{border-color:var(--border);color:var(--g);background:rgba(57,255,20,0.04);}
+.nav-right{display:flex;align-items:center;gap:16px;}
+.sys-badge{font-family:'DM Mono',monospace;font-size:9px;color:var(--g3);letter-spacing:.15em;}
+.sys-badge b{color:var(--g2);font-weight:400;}
+.blink-dot{width:6px;height:6px;border-radius:50%;background:var(--g);animation:blink 1.2s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* layout */
+#layout{display:flex;flex:1;margin-top:50px;}
+#sidebar{width:220px;flex-shrink:0;border-right:1px solid var(--border);padding:32px 0;position:sticky;top:50px;height:calc(100vh - 50px);overflow-y:auto;background:rgba(0,0,0,0.5);z-index:10;}
+#sidebar::-webkit-scrollbar{width:3px;}
+#sidebar::-webkit-scrollbar-thumb{background:var(--g3);}
+.sidebar-section{padding:0 20px;margin-bottom:24px;}
+.sidebar-title{font-family:'DM Mono',monospace;font-size:8px;color:var(--g3);letter-spacing:.3em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.sidebar-title::before{content:'';display:block;width:16px;height:1px;background:var(--g3);}
+.sidebar-link{display:block;font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em;text-decoration:none;padding:5px 0;border-left:2px solid transparent;padding-left:10px;margin-left:-10px;transition:all .15s;cursor:none;}
+.sidebar-link:hover,.sidebar-link.active{color:var(--g);border-left-color:var(--g);}
+
+#content{flex:1;padding:60px 64px;max-width:860px;position:relative;z-index:10;}
+.doc-section{margin-bottom:72px;}
+.doc-kicker{font-family:'DM Mono',monospace;font-size:9px;color:var(--g3);letter-spacing:.35em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:12px;}
+.doc-kicker::before{content:'';display:block;width:20px;height:1px;background:var(--g3);}
+.doc-h1{font-family:'Orbitron',sans-serif;font-weight:900;font-size:clamp(28px,4vw,48px);color:#fff;letter-spacing:.02em;mix-blend-mode:difference;margin-bottom:24px;line-height:.95;}
+.doc-h1 em{color:var(--g);font-style:normal;}
+.doc-h2{font-family:'Orbitron',sans-serif;font-weight:700;font-size:18px;color:#fff;letter-spacing:.08em;margin-bottom:16px;margin-top:40px;text-transform:uppercase;}
+.doc-h3{font-family:'DM Mono',monospace;font-size:12px;color:var(--g);letter-spacing:.15em;text-transform:uppercase;margin-bottom:10px;margin-top:28px;}
+.doc-p{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted);line-height:2;letter-spacing:.05em;margin-bottom:16px;}
+.doc-p strong{color:var(--text);font-weight:400;}
+.doc-p a{color:var(--g);text-decoration:none;}
+.doc-p a:hover{text-decoration:underline;}
+.doc-code{background:var(--panel);border:1px solid var(--border);padding:20px 24px;margin:16px 0 24px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--g2);line-height:1.85;overflow-x:auto;position:relative;}
+.doc-code .comment{color:var(--g3);font-style:italic;}
+.doc-code .kw{color:#ff79c6;}
+.doc-code .fn{color:#50fa7b;}
+.doc-code .st{color:#f1fa8c;}
+.doc-code .nm{color:#bd93f9;}
+.code-label{position:absolute;top:8px;right:12px;font-family:'DM Mono',monospace;font-size:8px;color:var(--g3);letter-spacing:.2em;text-transform:uppercase;}
+.doc-table{width:100%;border-collapse:collapse;margin:16px 0 24px;font-family:'DM Mono',monospace;font-size:11px;}
+.doc-table th{text-align:left;padding:8px 16px;border-bottom:1px solid var(--g3);color:var(--g);letter-spacing:.15em;text-transform:uppercase;font-weight:400;}
+.doc-table td{padding:10px 16px;border-bottom:1px solid var(--border);color:var(--muted);letter-spacing:.05em;line-height:1.6;}
+.doc-table td:first-child{color:var(--text);}
+.doc-table tr:hover td{background:rgba(57,255,20,0.02);}
+.callout{border:1px solid rgba(57,255,20,0.25);padding:16px 20px;margin:16px 0 24px;background:rgba(57,255,20,0.03);}
+.callout-label{font-family:'DM Mono',monospace;font-size:8px;color:var(--g);letter-spacing:.25em;text-transform:uppercase;margin-bottom:8px;}
+.callout p{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);line-height:1.85;letter-spacing:.05em;}
+.callout p strong{color:var(--g2);}
+.badge{display:inline-block;font-family:'DM Mono',monospace;font-size:8px;letter-spacing:.15em;text-transform:uppercase;padding:2px 8px;border:1px solid;margin-right:4px;}
+.badge.easy{border-color:var(--g3);color:var(--g2);}
+.badge.medium{border-color:#cc8800;color:#ffcc00;}
+.badge.hard{border-color:#cc2200;color:#ff5555;}
+.badge.free{border-color:var(--g3);color:var(--g3);}
+.step-list{list-style:none;display:flex;flex-direction:column;gap:0;}
+.step-item{display:grid;grid-template-columns:32px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--border);}
+.step-item:first-child{border-top:1px solid var(--border);}
+.step-n{font-family:'Orbitron',sans-serif;font-weight:700;font-size:14px;color:var(--g3);}
+.step-body{}
+.step-title{font-family:'DM Mono',monospace;font-size:11px;color:var(--text);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px;}
+.step-desc{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);line-height:1.8;letter-spacing:.04em;}
+</style>
+</head>
+<body>
+<div id="scan"></div>
+<div id="cur"></div>
+<canvas id="gc"></canvas>
+
+<nav>
+  <a class="logo" href="index.html">PYDUDE<sup>beta</sup></a>
+  <div class="nav-tabs">
+    <a class="nav-tab" href="index.html">Home</a>
+    <a class="nav-tab" href="pydude_playground.html">Playground</a>
+    <a class="nav-tab" href="challenges.html">Challenges</a>
+    <a class="nav-tab on" href="#">Docs</a>
+    <a class="nav-tab gate-link" href="comm.html">Community</a>
+
+  </div>
+  <div class="nav-right">
+    <div class="sys-badge">VERSION <b>0.9.4-beta</b></div>
+    <div class="blink-dot"></div>
+  </div>
+</nav>
+
+<div id="layout">
+  <div id="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-title">getting started</div>
+      <a class="sidebar-link active" href="#intro">What is PYDUDE?</a>
+      <a class="sidebar-link" href="#quickstart">Quick Start</a>
+      <a class="sidebar-link" href="#local-setup">Local Setup</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">playground</div>
+      <a class="sidebar-link" href="#editor">Code Editor</a>
+      <a class="sidebar-link" href="#running">Running Code</a>
+      <a class="sidebar-link" href="#input">User Input</a>
+      <a class="sidebar-link" href="#output">Output & Console</a>
+      <a class="sidebar-link" href="#tests">Test Runner</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">ai assistant</div>
+      <a class="sidebar-link" href="#ai-overview">Overview</a>
+      <a class="sidebar-link" href="#ai-modes">Hint / Review / Chat</a>
+      <a class="sidebar-link" href="#ai-models">Model Selection</a>
+      <a class="sidebar-link" href="#ai-keys">API Keys</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">challenges</div>
+      <a class="sidebar-link" href="#challenges-overview">Overview</a>
+      <a class="sidebar-link" href="#difficulty">Difficulty Levels</a>
+      <a class="sidebar-link" href="#scoring">Scoring</a>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-title">reference</div>
+      <a class="sidebar-link" href="#shortcuts">Keyboard Shortcuts</a>
+      <a class="sidebar-link" href="#packages">Available Packages</a>
+      <a class="sidebar-link" href="#faq">FAQ</a>
+    </div>
+  </div>
+
+  <div id="content">
+    <!-- INTRO -->
+    <div class="doc-section" id="intro">
+      <div class="doc-kicker">// 01 · overview</div>
+      <h1 class="doc-h1">WHAT IS<br><em>PYDUDE?</em></h1>
+      <p class="doc-p">PYDUDE is a <strong>retro-terminal Python coding platform</strong> that runs entirely in your browser. No installation, no setup, no waiting. Open the page and start writing Python.</p>
+      <p class="doc-p">It combines a <strong>real Python 3.12 interpreter</strong> (via Pyodide WebAssembly), a <strong>structured challenge system</strong>, and an <strong>AI assistant</strong> that reads your code in real time to give context-aware hints and reviews.</p>
+      <div class="callout">
+        <div class="callout-label">// current status</div>
+        <p>PYDUDE is in <strong>v0.9.4-beta</strong>. Core features are stable. Auth, dashboard, and shared sessions are coming in v1.0.</p>
+      </div>
+    </div>
+
+    <!-- QUICKSTART -->
+    <div class="doc-section" id="quickstart">
+      <div class="doc-kicker">// 02 · quickstart</div>
+      <h2 class="doc-h1">QUICK<br><em>START</em></h2>
+      <ul class="step-list">
+        <li class="step-item"><div class="step-n">01</div><div class="step-body"><div class="step-title">Open the Playground</div><div class="step-desc">Go to pydude_playground.html. Python 3.12 loads automatically in the background — takes 3-5 seconds on first visit.</div></div></li>
+        <li class="step-item"><div class="step-n">02</div><div class="step-body"><div class="step-title">Write Code</div><div class="step-desc">Type Python directly in the editor. Tab key indents 4 spaces. All standard library modules are available.</div></div></li>
+        <li class="step-item"><div class="step-n">03</div><div class="step-body"><div class="step-title">Press RUN</div><div class="step-desc">Output appears instantly below. Errors show in red. System messages go to the Console tab.</div></div></li>
+        <li class="step-item"><div class="step-n">04</div><div class="step-body"><div class="step-title">Pick a Challenge</div><div class="step-desc">Go to challenges.html, click any card. The problem loads into the playground with starter code and test cases.</div></div></li>
+        <li class="step-item"><div class="step-n">05</div><div class="step-body"><div class="step-title">Ask the AI</div><div class="step-desc">Click Hint, Review, or Chat in the right panel. Add your Groq API key for AI access — it's free.</div></div></li>
+      </ul>
+    </div>
+
+    <!-- LOCAL SETUP -->
+    <div class="doc-section" id="local-setup">
+      <div class="doc-kicker">// 03 · setup</div>
+      <h2 class="doc-h1">LOCAL<br><em>SETUP</em></h2>
+      <p class="doc-p">You must serve the files from a local HTTP server — opening HTML files directly (file://) blocks fetch() calls needed to load challenges.json.</p>
+      <div class="doc-code">
+        <div class="code-label">powershell</div>
+        <span class="comment"># navigate to your pydude folder</span>
+cd "C:\Users\you\pydude"
+
+<span class="comment"># start local server</span>
+python -m http.server 8080
+
+<span class="comment"># open in browser</span>
+http://localhost:8080/pydude.html
+      </div>
+      <p class="doc-p">Keep the terminal open while working — closing it stops the server.</p>
+    </div>
+
+    <!-- EDITOR -->
+    <div class="doc-section" id="editor">
+      <div class="doc-kicker">// 04 · playground</div>
+      <h2 class="doc-h1">CODE<br><em>EDITOR</em></h2>
+      <p class="doc-p">The editor is a plain textarea styled to feel like a terminal. It supports:</p>
+      <table class="doc-table">
+        <tr><th>Feature</th><th>Detail</th></tr>
+        <tr><td>Tab indentation</td><td>4 spaces, works naturally</td></tr>
+        <tr><td>Python 3.12</td><td>Full language support via Pyodide WASM</td></tr>
+        <tr><td>Standard library</td><td>All stdlib modules available</td></tr>
+        <tr><td>Light mode</td><td>Toggle via the switch in the challenge bar</td></tr>
+        <tr><td>Two tabs</td><td>solution.py for your code, test.py for test results</td></tr>
+      </table>
+    </div>
+
+    <!-- RUNNING -->
+    <div class="doc-section" id="running">
+      <div class="doc-kicker">// 05 · execution</div>
+      <h2 class="doc-h1">RUNNING<br><em>CODE</em></h2>
+      <p class="doc-p">Click <strong>RUN</strong> or use the keyboard shortcut. Python executes in a WebAssembly sandbox — your code never leaves your browser.</p>
+      <div class="doc-code">
+        <div class="code-label">example</div>
+<span class="kw">def</span> <span class="fn">factorial</span>(n):
+    <span class="kw">if</span> n <= 1: <span class="kw">return</span> 1
+    <span class="kw">return</span> n * factorial(n - 1)
+
+<span class="fn">print</span>(factorial(<span class="nm">10</span>))  <span class="comment"># → 3628800</span>
+      </div>
+      <div class="callout">
+        <div class="callout-label">// warning</div>
+        <p>Infinite loops will <strong>freeze the browser tab</strong>. Always ensure your loops have a termination condition. A timeout guard is planned for v1.0.</p>
+      </div>
+    </div>
+
+    <!-- INPUT -->
+    <div class="doc-section" id="input">
+      <div class="doc-kicker">// 06 · input</div>
+      <h2 class="doc-h1">USER<br><em>INPUT</em></h2>
+      <p class="doc-p">PYDUDE supports Python's <strong>input()</strong> function. When your code contains input() calls, PYDUDE detects them before running and prompts you to enter each value one at a time.</p>
+      <div class="doc-code">
+        <div class="code-label">example</div>
+name = <span class="fn">input</span>(<span class="st">"Enter your name: "</span>)
+age  = <span class="fn">int</span>(<span class="fn">input</span>(<span class="st">"Enter your age: "</span>))
+<span class="fn">print</span>(<span class="st">f"Hello {name}, you are {age} years old"</span>)
+      </div>
+      <p class="doc-p">PYDUDE counts input() calls statically, prompts you for each value, then runs the code with all inputs pre-loaded. This sidesteps Pyodide's lack of native stdin support.</p>
+      <div class="callout">
+        <div class="callout-label">// limitation</div>
+        <p>Dynamic input counts like <strong>for i in range(int(input()))</strong> won't pre-collect the right number of inputs. Workaround: hardcode the count during testing, then replace with input().</p>
+      </div>
+    </div>
+
+    <!-- OUTPUT -->
+    <div class="doc-section" id="output">
+      <div class="doc-kicker">// 07 · output</div>
+      <h2 class="doc-h1">OUTPUT &<br><em>CONSOLE</em></h2>
+      <p class="doc-p">The output area has two tabs:</p>
+      <table class="doc-table">
+        <tr><th>Tab</th><th>Shows</th></tr>
+        <tr><td>output</td><td>stdout — everything printed with print()</td></tr>
+        <tr><td>console</td><td>stderr, tracebacks, Pyodide system messages, timestamps</td></tr>
+      </table>
+      <p class="doc-p">Errors appear in red in the output tab (last 3 lines of traceback). Full traceback always goes to console.</p>
+    </div>
+
+    <!-- TESTS -->
+    <div class="doc-section" id="tests">
+      <div class="doc-kicker">// 08 · testing</div>
+      <h2 class="doc-h1">TEST<br><em>RUNNER</em></h2>
+      <p class="doc-p">When a challenge is loaded, the <strong>TEST</strong> button appears next to RUN. Clicking it:</p>
+      <ul class="step-list">
+        <li class="step-item"><div class="step-n">01</div><div class="step-body"><div class="step-title">Loads your code silently</div><div class="step-desc">Defines all your functions without printing output.</div></div></li>
+        <li class="step-item"><div class="step-n">02</div><div class="step-body"><div class="step-title">Runs each test case</div><div class="step-desc">Calls the function with test inputs, compares result to expected output.</div></div></li>
+        <li class="step-item"><div class="step-n">03</div><div class="step-body"><div class="step-title">Shows PASS / FAIL per test</div><div class="step-desc">The test.py tab updates with green/red status, expected vs got values.</div></div></li>
+        <li class="step-item"><div class="step-n">04</div><div class="step-body"><div class="step-title">Calculates score</div><div class="step-desc">Score = (passed / total) × 100. Best score is saved to localStorage automatically.</div></div></li>
+      </ul>
+    </div>
+
+    <!-- AI OVERVIEW -->
+    <div class="doc-section" id="ai-overview">
+      <div class="doc-kicker">// 09 · ai assistant</div>
+      <h2 class="doc-h1">AI<br><em>ASSISTANT</em></h2>
+      <p class="doc-p">The AI panel reads your <strong>live code</strong>, <strong>last output</strong>, and <strong>current challenge</strong> on every message. Responses are always specific to what you've written — not generic Python advice.</p>
+      <p class="doc-p">The system prompt sent to the AI includes your full code, the challenge description, difficulty, and last output automatically.</p>
+    </div>
+
+    <!-- AI MODES -->
+    <div class="doc-section" id="ai-modes">
+      <div class="doc-kicker">// 10 · modes</div>
+      <h2 class="doc-h1">HINT / REVIEW<br><em>/ CHAT</em></h2>
+      <table class="doc-table">
+        <tr><th>Mode</th><th>What it does</th><th>Auto-fires</th></tr>
+        <tr><td>Hint</td><td>Nudges you toward the answer without spoiling it. Max 80 words.</td><td>Yes — on click</td></tr>
+        <tr><td>Review</td><td>Full code review: correctness, complexity, style, edge cases.</td><td>Yes — on click</td></tr>
+        <tr><td>Chat</td><td>Open Q&A. Ask anything about Python, your code, or the challenge.</td><td>No</td></tr>
+      </table>
+      <p class="doc-p">Quick prompt buttons below the chat let you fire common requests instantly without typing.</p>
+    </div>
+
+    <!-- AI MODELS -->
+    <div class="doc-section" id="ai-models">
+      <div class="doc-kicker">// 11 · models</div>
+      <h2 class="doc-h1">MODEL<br><em>SELECTION</em></h2>
+      <table class="doc-table">
+        <tr><th>Model</th><th>Provider</th><th>Speed</th><th>Cost</th></tr>
+        <tr><td>Llama 3.3 70B</td><td>Groq</td><td>Very fast</td><td>Free</td></tr>
+        <tr><td>Claude Haiku 4.5</td><td>Anthropic</td><td>Fast</td><td>Paid</td></tr>
+        <tr><td>Local models</td><td>Ollama</td><td>Varies</td><td>Free (local)</td></tr>
+      </table>
+      <p class="doc-p">Switch models using the buttons in the AI panel header. Ollama shows a dropdown of all locally installed models when selected.</p>
+    </div>
+
+    <!-- API KEYS -->
+    <div class="doc-section" id="ai-keys">
+      <div class="doc-kicker">// 12 · api keys</div>
+      <h2 class="doc-h1">API<br><em>KEYS</em></h2>
+      <h3 class="doc-h3">Groq (free, recommended)</h3>
+      <p class="doc-p">Get a free key at <a href="https://console.groq.com" target="_blank">console.groq.com</a> → API Keys → Create. No credit card needed. Paste it into pydude_playground.html:</p>
+      <div class="doc-code"><span class="kw">const</span> GROQ_KEY = <span class="st">'your_key_here'</span>;</div>
+      <h3 class="doc-h3">Claude (paid)</h3>
+      <p class="doc-p">Get a key at <a href="https://console.anthropic.com" target="_blank">console.anthropic.com</a>. Claude Haiku 4.5 is the most cost-effective model for coding hints.</p>
+      <h3 class="doc-h3">Ollama (local, free)</h3>
+      <p class="doc-p">Install Ollama from <a href="https://ollama.com" target="_blank">ollama.com</a>, then start it with CORS enabled:</p>
+      <div class="doc-code"><span class="comment"># Windows PowerShell</span>
+$env:OLLAMA_ORIGINS=<span class="st">"*"</span>; ollama serve
+
+<span class="comment"># pull a model</span>
+ollama pull qwen2.5:3b</div>
+      <div class="callout">
+        <div class="callout-label">// security note</div>
+        <p>API keys in HTML files are visible to anyone who views source. Before deploying publicly, move keys to a <strong>server-side proxy</strong> (Vercel Edge Function). See deployment docs for details.</p>
+      </div>
+    </div>
+
+    <!-- CHALLENGES -->
+    <div class="doc-section" id="challenges-overview">
+      <div class="doc-kicker">// 13 · challenges</div>
+      <h2 class="doc-h1">CHALLENGE<br><em>SYSTEM</em></h2>
+      <p class="doc-p">PYDUDE has 50 challenges across three difficulty levels. Each challenge includes a description, examples, constraints, starter code, and automated test cases.</p>
+      <p class="doc-p">Click any card on the challenges page to load it into the playground via URL parameter: <strong>pydude_playground.html?id=N</strong></p>
+    </div>
+
+    <!-- DIFFICULTY -->
+    <div class="doc-section" id="difficulty">
+      <div class="doc-kicker">// 14 · difficulty</div>
+      <h2 class="doc-h1">DIFFICULTY<br><em>LEVELS</em></h2>
+      <table class="doc-table">
+        <tr><th>Level</th><th>Topics</th><th>Count</th></tr>
+        <tr><td><span class="badge easy">easy</span></td><td>Arrays, strings, basic loops, recursion fundamentals</td><td>10</td></tr>
+        <tr><td><span class="badge medium">medium</span></td><td>DP, sliding window, graphs, sorting, two pointers</td><td>25</td></tr>
+        <tr><td><span class="badge hard">hard</span></td><td>Advanced DP, backtracking, system design, graph algorithms</td><td>15</td></tr>
+      </table>
+    </div>
+
+    <!-- SCORING -->
+    <div class="doc-section" id="scoring">
+      <div class="doc-kicker">// 15 · scoring</div>
+      <h2 class="doc-h1">SCORING<br><em>SYSTEM</em></h2>
+      <p class="doc-p">Score = (tests passed / total tests) × 100. Scores are saved locally in your browser via localStorage.</p>
+      <table class="doc-table">
+        <tr><th>Score</th><th>Meaning</th></tr>
+        <tr><td>100 / 100</td><td>All tests passed — challenge solved ✓</td></tr>
+        <tr><td>50 – 99</td><td>Partial solution — some edge cases missing</td></tr>
+        <tr><td>0 – 49</td><td>Needs more work</td></tr>
+      </table>
+      <p class="doc-p">Best score per challenge is kept. Re-submitting a lower score won't overwrite your best.</p>
+    </div>
+
+    <!-- SHORTCUTS -->
+    <div class="doc-section" id="shortcuts">
+      <div class="doc-kicker">// 16 · reference</div>
+      <h2 class="doc-h1">KEYBOARD<br><em>SHORTCUTS</em></h2>
+      <table class="doc-table">
+        <tr><th>Key</th><th>Action</th></tr>
+        <tr><td>Tab</td><td>Indent 4 spaces in editor</td></tr>
+        <tr><td>Enter (AI input)</td><td>Send message</td></tr>
+        <tr><td>Shift + Enter (AI input)</td><td>New line without sending</td></tr>
+        <tr><td>Enter (terminal input)</td><td>Submit input value</td></tr>
+      </table>
+    </div>
+
+    <!-- PACKAGES -->
+    <div class="doc-section" id="packages">
+      <div class="doc-kicker">// 17 · packages</div>
+      <h2 class="doc-h1">AVAILABLE<br><em>PACKAGES</em></h2>
+      <p class="doc-p">Standard library is fully available. Third-party packages via Pyodide (import and use directly — no pip needed):</p>
+      <table class="doc-table">
+        <tr><th>Package</th><th>Use case</th></tr>
+        <tr><td>numpy</td><td>Numerical computing, arrays</td></tr>
+        <tr><td>pandas</td><td>Data manipulation, DataFrames</td></tr>
+        <tr><td>matplotlib</td><td>Plotting and visualization</td></tr>
+        <tr><td>scipy</td><td>Scientific computing</td></tr>
+        <tr><td>scikit-learn</td><td>Machine learning</td></tr>
+        <tr><td>sympy</td><td>Symbolic mathematics</td></tr>
+      </table>
+      <div class="callout">
+        <div class="callout-label">// note</div>
+        <p>Third-party packages load on first import and may take a few seconds. <strong>matplotlib</strong> plots won't display inline in the current version — output as text instead.</p>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="doc-section" id="faq">
+      <div class="doc-kicker">// 18 · faq</div>
+      <h2 class="doc-h1">FAQ</h2>
+      <h3 class="doc-h3">Why is Python loading slowly?</h3>
+      <p class="doc-p">Pyodide downloads ~8MB of WebAssembly on first load. Subsequent loads use browser cache and are instant.</p>
+      <h3 class="doc-h3">Why can't challenges.json load?</h3>
+      <p class="doc-p">You're opening the HTML as a file:// URL. Run <strong>python -m http.server 8080</strong> and access via localhost:8080 instead.</p>
+      <h3 class="doc-h3">Ollama says CORS blocked?</h3>
+      <p class="doc-p">Restart Ollama with: <strong>$env:OLLAMA_ORIGINS="*"; ollama serve</strong> in PowerShell. Keep that terminal open.</p>
+      <h3 class="doc-h3">My score isn't saving?</h3>
+      <p class="doc-p">Scores are stored in localStorage tied to your browser. Clearing browser data or using incognito mode will reset progress.</p>
+      <h3 class="doc-h3">Can I run code offline?</h3>
+      <p class="doc-p">Yes — once Pyodide is cached, Python runs fully offline. The AI assistant requires an internet connection for API calls.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+// pixel grid
+(function(){
+  const gc=document.getElementById('gc'),ctx=gc.getContext('2d');
+  const CELL=26,SYMS=['+','-','.','+','.','+','-','.'];
+  let W,H,cols,rows,blocks;
+  function resize(){W=gc.width=window.innerWidth;H=gc.height=window.innerHeight;cols=Math.ceil(W/CELL)+1;rows=Math.ceil(H/CELL)+1;blocks=[];for(let r=0;r<rows;r++)for(let c=0;c<cols;c++)blocks.push({x:c*CELL,y:r*CELL,sym:SYMS[(r*5+c*3)%SYMS.length],bri:0,tgt:0});}
+  document.addEventListener('mousemove',e=>{const mx=e.clientX,my=e.clientY;blocks.forEach(b=>{const d=Math.hypot(b.x+CELL*.5-mx,b.y+CELL*.5-my);b.tgt=d<90?Math.pow(1-d/90,1.7):0;});});
+  document.addEventListener('mouseleave',()=>blocks.forEach(b=>b.tgt=0));
+  function draw(){ctx.clearRect(0,0,W,H);blocks.forEach(b=>{b.bri+=(b.tgt-b.bri)*0.13;const v=b.bri;if(v<0.015)return;const px=b.x,py=b.y,pad=3,bw=CELL-pad*2,bh=CELL-pad*2;const lum=Math.floor(v*255);ctx.fillStyle=`rgb(${lum},${lum},${lum})`;ctx.fillRect(px+pad,py+pad,bw,bh);const ba=v<0.6?v*.85:(1-v)*.85;ctx.strokeStyle=`rgba(57,255,20,${ba})`;ctx.lineWidth=0.7;ctx.strokeRect(px+pad+.5,py+pad+.5,bw-1,bh-1);ctx.fillStyle=v>0.55?`rgba(${Math.floor((1-v)*60)},${Math.floor((1-v)*60)},${Math.floor((1-v)*60)},0.7)`:`rgba(57,255,20,${v*.9+.08})`;ctx.font=`${b.sym==='.'?9:10}px 'Share Tech Mono',monospace`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(b.sym,px+CELL*.5,py+CELL*.5);});requestAnimationFrame(draw);}
+  window.addEventListener('resize',resize);resize();draw();
+})();
+
+// cursor
+const cur=document.getElementById('cur');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';});
+document.querySelectorAll('a,.sidebar-link,.nav-tab').forEach(el=>{
+  el.addEventListener('mouseenter',()=>cur.classList.add('act'));
+  el.addEventListener('mouseleave',()=>cur.classList.remove('act'));
+});
+
+// active sidebar link on scroll
+const sections=document.querySelectorAll('.doc-section');
+const links=document.querySelectorAll('.sidebar-link');
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const link=document.querySelector(`.sidebar-link[href="#${e.target.id}"]`);
+      if(link) link.classList.add('active');
+    }
+  });
+},{rootMargin:'-40% 0px -55% 0px'});
+sections.forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>

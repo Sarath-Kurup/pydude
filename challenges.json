@@ -1,0 +1,914 @@
+[
+  {
+    "id": 1,
+    "title": "Two Sum",
+    "difficulty": "easy",
+    "tags": ["arrays", "hashmap"],
+    "description": "Given an array of integers nums and an integer target, return the indices of the two numbers that add up to target.\n\nYou may assume each input has exactly one solution, and you may not use the same element twice.\n\nConstraints:\n- 2 <= nums.length <= 10^4\n- -10^9 <= nums[i] <= 10^9",
+    "examples": [
+      { "input": "nums = [2,7,11,15], target = 9", "output": "[0, 1]" },
+      { "input": "nums = [3,2,4], target = 6", "output": "[1, 2]" }
+    ],
+    "starter": "def two_sum(nums, target):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "two_sum([2,7,11,15], 9)", "expected": "[0, 1]" },
+      { "fn": "two_sum([3,2,4], 6)", "expected": "[1, 2]" },
+      { "fn": "two_sum([3,3], 6)", "expected": "[0, 1]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 2,
+    "title": "Palindrome Check",
+    "difficulty": "easy",
+    "tags": ["strings"],
+    "description": "Write a function that returns True if a given string is a palindrome, ignoring spaces and case.\n\nA palindrome reads the same forwards and backwards.\n\nConstraints:\n- 0 <= s.length <= 2 * 10^5",
+    "examples": [
+      { "input": "'racecar'", "output": "True" },
+      { "input": "'hello'", "output": "False" }
+    ],
+    "starter": "def is_palindrome(s):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "is_palindrome('racecar')", "expected": "True" },
+      { "fn": "is_palindrome('hello')", "expected": "False" },
+      { "fn": "is_palindrome('A man a plan a canal Panama')", "expected": "True" },
+      { "fn": "is_palindrome('')", "expected": "True" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 3,
+    "title": "FizzBuzz",
+    "difficulty": "easy",
+    "tags": ["loops", "basics"],
+    "description": "Write a function fizzbuzz(n) that returns a list of strings for numbers 1 to n:\n- 'Fizz' for multiples of 3\n- 'Buzz' for multiples of 5\n- 'FizzBuzz' for multiples of both\n- The number as a string otherwise",
+    "examples": [
+      { "input": "n = 5", "output": "['1','2','Fizz','4','Buzz']" }
+    ],
+    "starter": "def fizzbuzz(n):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "fizzbuzz(5)", "expected": "['1', '2', 'Fizz', '4', 'Buzz']" },
+      { "fn": "fizzbuzz(15)[-1]", "expected": "'FizzBuzz'" },
+      { "fn": "fizzbuzz(1)", "expected": "['1']" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 4,
+    "title": "Binary Search",
+    "difficulty": "easy",
+    "tags": ["arrays", "search"],
+    "description": "Implement binary search. Given a sorted array and a target value, return the index of target. If not found, return -1.\n\nMust run in O(log n) time.\n\nConstraints:\n- 1 <= nums.length <= 10^4\n- All values are unique",
+    "examples": [
+      { "input": "nums = [-1,0,3,5,9,12], target = 9", "output": "4" },
+      { "input": "nums = [-1,0,3,5,9,12], target = 2", "output": "-1" }
+    ],
+    "starter": "def binary_search(nums, target):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "binary_search([-1,0,3,5,9,12], 9)", "expected": "4" },
+      { "fn": "binary_search([-1,0,3,5,9,12], 2)", "expected": "-1" },
+      { "fn": "binary_search([1], 1)", "expected": "0" },
+      { "fn": "binary_search([], 1)", "expected": "-1" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 5,
+    "title": "Reverse a String",
+    "difficulty": "easy",
+    "tags": ["strings", "basics"],
+    "description": "Write a function that reverses a string without using built-in reverse functions.\n\nReturn the reversed string.\n\nConstraints:\n- 1 <= s.length <= 10^5",
+    "examples": [
+      { "input": "'hello'", "output": "'olleh'" },
+      { "input": "'Python'", "output": "'nohtyP'" }
+    ],
+    "starter": "def reverse_string(s):\n    # your code here — don't use s[::-1] or reversed()\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "reverse_string('hello')", "expected": "'olleh'" },
+      { "fn": "reverse_string('Python')", "expected": "'nohtyP'" },
+      { "fn": "reverse_string('a')", "expected": "'a'" },
+      { "fn": "reverse_string('')", "expected": "''" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 6,
+    "title": "Count Vowels",
+    "difficulty": "easy",
+    "tags": ["strings", "basics"],
+    "description": "Write a function that counts the number of vowels (a, e, i, o, u) in a string. Case insensitive.\n\nConstraints:\n- 0 <= s.length <= 10^5",
+    "examples": [
+      { "input": "'hello world'", "output": "3" },
+      { "input": "'AEIOU'", "output": "5" }
+    ],
+    "starter": "def count_vowels(s):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "count_vowels('hello world')", "expected": "3" },
+      { "fn": "count_vowels('AEIOU')", "expected": "5" },
+      { "fn": "count_vowels('rhythm')", "expected": "0" },
+      { "fn": "count_vowels('')", "expected": "0" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 7,
+    "title": "Find Maximum",
+    "difficulty": "easy",
+    "tags": ["arrays", "basics"],
+    "description": "Find the maximum element in a list without using the built-in max() function.\n\nConstraints:\n- 1 <= nums.length <= 10^4\n- -10^9 <= nums[i] <= 10^9",
+    "examples": [
+      { "input": "[3,1,4,1,5,9,2,6]", "output": "9" },
+      { "input": "[-5,-3,-1,-8]", "output": "-1" }
+    ],
+    "starter": "def find_max(nums):\n    # your code here — don't use max()\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "find_max([3,1,4,1,5,9,2,6])", "expected": "9" },
+      { "fn": "find_max([-5,-3,-1,-8])", "expected": "-1" },
+      { "fn": "find_max([42])", "expected": "42" },
+      { "fn": "find_max([0,0,0])", "expected": "0" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 8,
+    "title": "Fibonacci Sequence",
+    "difficulty": "easy",
+    "tags": ["recursion", "dp"],
+    "description": "Return the nth Fibonacci number. The sequence starts: 0, 1, 1, 2, 3, 5, 8, 13...\n\nF(0) = 0, F(1) = 1, F(n) = F(n-1) + F(n-2)\n\nOptimize for n up to 50 — plain recursion will time out.",
+    "examples": [
+      { "input": "n = 6", "output": "8" },
+      { "input": "n = 10", "output": "55" }
+    ],
+    "starter": "def fibonacci(n):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "fibonacci(0)", "expected": "0" },
+      { "fn": "fibonacci(1)", "expected": "1" },
+      { "fn": "fibonacci(6)", "expected": "8" },
+      { "fn": "fibonacci(10)", "expected": "55" },
+      { "fn": "fibonacci(20)", "expected": "6765" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 9,
+    "title": "Anagram Check",
+    "difficulty": "easy",
+    "tags": ["strings", "hashmap"],
+    "description": "Given two strings s and t, return True if t is an anagram of s, False otherwise.\n\nAn anagram uses all characters of the original exactly once.\n\nConstraints:\n- 1 <= s.length, t.length <= 5 * 10^4\n- lowercase English letters only",
+    "examples": [
+      { "input": "s='anagram', t='nagaram'", "output": "True" },
+      { "input": "s='rat', t='car'", "output": "False" }
+    ],
+    "starter": "def is_anagram(s, t):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "is_anagram('anagram', 'nagaram')", "expected": "True" },
+      { "fn": "is_anagram('rat', 'car')", "expected": "False" },
+      { "fn": "is_anagram('listen', 'silent')", "expected": "True" },
+      { "fn": "is_anagram('ab', 'a')", "expected": "False" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 10,
+    "title": "Remove Duplicates",
+    "difficulty": "easy",
+    "tags": ["arrays", "sets"],
+    "description": "Given a sorted array, remove duplicates in-place and return the new length. The relative order of elements should be kept.\n\nDo not allocate extra space — modify the array in-place with O(1) extra memory.",
+    "examples": [
+      { "input": "[1,1,2]", "output": "2" },
+      { "input": "[0,0,1,1,1,2,2,3,3,4]", "output": "5" }
+    ],
+    "starter": "def remove_duplicates(nums):\n    # modify nums in-place, return new length\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "remove_duplicates([1,1,2])", "expected": "2" },
+      { "fn": "remove_duplicates([0,0,1,1,1,2,2,3,3,4])", "expected": "5" },
+      { "fn": "remove_duplicates([1])", "expected": "1" },
+      { "fn": "remove_duplicates([1,2,3])", "expected": "3" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 11,
+    "title": "Valid Parentheses",
+    "difficulty": "medium",
+    "tags": ["stack", "strings"],
+    "description": "Given a string containing only '(', ')', '{', '}', '[' and ']', determine if the input string is valid.\n\nA string is valid if every open bracket is closed by the same type of bracket in the correct order.\n\nConstraints:\n- 1 <= s.length <= 10^4",
+    "examples": [
+      { "input": "'()'", "output": "True" },
+      { "input": "'(]'", "output": "False" }
+    ],
+    "starter": "def is_valid(s):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "is_valid('()')", "expected": "True" },
+      { "fn": "is_valid('()[]{}')", "expected": "True" },
+      { "fn": "is_valid('(]')", "expected": "False" },
+      { "fn": "is_valid('([)]')", "expected": "False" },
+      { "fn": "is_valid('{[]}')", "expected": "True" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 12,
+    "title": "Matrix Spiral Traversal",
+    "difficulty": "medium",
+    "tags": ["matrix", "arrays"],
+    "description": "Given an m x n matrix, return all elements in spiral order (clockwise from top-left).\n\nHandle edge cases: empty matrix, single row, single column.\n\nConstraints:\n- m, n >= 0\n- m * n <= 10^4",
+    "examples": [
+      { "input": "[[1,2,3],[4,5,6],[7,8,9]]", "output": "[1,2,3,6,9,8,7,4,5]" }
+    ],
+    "starter": "from typing import List\n\ndef spiral_order(matrix: List[List[int]]) -> List[int]:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "spiral_order([[1,2,3],[4,5,6],[7,8,9]])", "expected": "[1, 2, 3, 6, 9, 8, 7, 4, 5]" },
+      { "fn": "spiral_order([[1,2,3,4],[5,6,7,8],[9,10,11,12]])", "expected": "[1, 2, 3, 4, 8, 12, 11, 10, 9, 5, 6, 7]" },
+      { "fn": "spiral_order([[1]])", "expected": "[1]" },
+      { "fn": "spiral_order([])", "expected": "[]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 13,
+    "title": "Longest Substring Without Repeating",
+    "difficulty": "medium",
+    "tags": ["strings", "sliding window"],
+    "description": "Given a string s, find the length of the longest substring without repeating characters.\n\nUse the sliding window technique for O(n) solution.\n\nConstraints:\n- 0 <= s.length <= 5 * 10^4",
+    "examples": [
+      { "input": "'abcabcbb'", "output": "3" },
+      { "input": "'pwwkew'", "output": "3" }
+    ],
+    "starter": "def length_of_longest_substring(s):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "length_of_longest_substring('abcabcbb')", "expected": "3" },
+      { "fn": "length_of_longest_substring('bbbbb')", "expected": "1" },
+      { "fn": "length_of_longest_substring('pwwkew')", "expected": "3" },
+      { "fn": "length_of_longest_substring('')", "expected": "0" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 14,
+    "title": "Merge Intervals",
+    "difficulty": "medium",
+    "tags": ["arrays", "sorting"],
+    "description": "Given an array of intervals, merge all overlapping intervals and return an array of non-overlapping intervals covering all input intervals.\n\nConstraints:\n- 1 <= intervals.length <= 10^4\n- intervals[i].length == 2",
+    "examples": [
+      { "input": "[[1,3],[2,6],[8,10],[15,18]]", "output": "[[1,6],[8,10],[15,18]]" }
+    ],
+    "starter": "from typing import List\n\ndef merge(intervals: List[List[int]]) -> List[List[int]]:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "merge([[1,3],[2,6],[8,10],[15,18]])", "expected": "[[1, 6], [8, 10], [15, 18]]" },
+      { "fn": "merge([[1,4],[4,5]])", "expected": "[[1, 5]]" },
+      { "fn": "merge([[1,4]])", "expected": "[[1, 4]]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 15,
+    "title": "Group Anagrams",
+    "difficulty": "medium",
+    "tags": ["strings", "hashmap"],
+    "description": "Given an array of strings, group the anagrams together. You can return the answer in any order.\n\nConstraints:\n- 1 <= strs.length <= 10^4\n- 0 <= strs[i].length <= 100",
+    "examples": [
+      { "input": "['eat','tea','tan','ate','nat','bat']", "output": "[['eat','tea','ate'],['tan','nat'],['bat']]" }
+    ],
+    "starter": "from typing import List\n\ndef group_anagrams(strs: List[str]) -> List[List[str]]:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "sorted([sorted(g) for g in group_anagrams(['eat','tea','tan','ate','nat','bat'])])", "expected": "[['ate', 'eat', 'tea'], ['bat'], ['nat', 'tan']]" },
+      { "fn": "group_anagrams([''])", "expected": "[['']]" },
+      { "fn": "group_anagrams(['a'])", "expected": "[['a']]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 16,
+    "title": "Product of Array Except Self",
+    "difficulty": "medium",
+    "tags": ["arrays", "prefix sum"],
+    "description": "Given an integer array nums, return an array answer such that answer[i] equals the product of all elements except nums[i].\n\nMust run in O(n) time. Do not use the division operation.\n\nConstraints:\n- 2 <= nums.length <= 10^5",
+    "examples": [
+      { "input": "[1,2,3,4]", "output": "[24,12,8,6]" },
+      { "input": "[-1,1,0,-3,3]", "output": "[0,0,9,0,0]" }
+    ],
+    "starter": "from typing import List\n\ndef product_except_self(nums: List[int]) -> List[int]:\n    # your code here — no division allowed\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "product_except_self([1,2,3,4])", "expected": "[24, 12, 8, 6]" },
+      { "fn": "product_except_self([-1,1,0,-3,3])", "expected": "[0, 0, 9, 0, 0]" },
+      { "fn": "product_except_self([2,3])", "expected": "[3, 2]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 17,
+    "title": "Jump Game",
+    "difficulty": "medium",
+    "tags": ["greedy", "arrays"],
+    "description": "Given an integer array nums where nums[i] represents the max jump length from index i, return True if you can reach the last index starting from index 0.\n\nConstraints:\n- 1 <= nums.length <= 3 * 10^4\n- 0 <= nums[i] <= 10^5",
+    "examples": [
+      { "input": "[2,3,1,1,4]", "output": "True" },
+      { "input": "[3,2,1,0,4]", "output": "False" }
+    ],
+    "starter": "from typing import List\n\ndef can_jump(nums: List[int]) -> bool:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "can_jump([2,3,1,1,4])", "expected": "True" },
+      { "fn": "can_jump([3,2,1,0,4])", "expected": "False" },
+      { "fn": "can_jump([0])", "expected": "True" },
+      { "fn": "can_jump([1,0,1,0])", "expected": "False" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 18,
+    "title": "Rotate Image",
+    "difficulty": "medium",
+    "tags": ["matrix", "arrays"],
+    "description": "Given an n x n 2D matrix, rotate the image by 90 degrees clockwise in-place.\n\nYou must rotate the matrix in-place — do not allocate another 2D matrix.\n\nConstraints:\n- n == matrix.length == matrix[i].length\n- 1 <= n <= 20",
+    "examples": [
+      { "input": "[[1,2,3],[4,5,6],[7,8,9]]", "output": "[[7,4,1],[8,5,2],[9,6,3]]" }
+    ],
+    "starter": "from typing import List\n\ndef rotate(matrix: List[List[int]]) -> None:\n    # rotate in-place, do not return anything\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "(lambda m: (rotate(m), m)[1])([[1,2,3],[4,5,6],[7,8,9]])", "expected": "[[7, 4, 1], [8, 5, 2], [9, 6, 3]]" },
+      { "fn": "(lambda m: (rotate(m), m)[1])([[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]])", "expected": "[[15, 13, 2, 5], [14, 3, 4, 1], [12, 6, 8, 9], [16, 7, 10, 11]]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 19,
+    "title": "Coin Change",
+    "difficulty": "medium",
+    "tags": ["dp", "greedy"],
+    "description": "Given an array of coin denominations and an amount, return the fewest number of coins needed to make up that amount. If it cannot be made, return -1.\n\nConstraints:\n- 1 <= coins.length <= 12\n- 1 <= coins[i] <= 2^31 - 1\n- 0 <= amount <= 10^4",
+    "examples": [
+      { "input": "coins=[1,5,11], amount=15", "output": "3" },
+      { "input": "coins=[2], amount=3", "output": "-1" }
+    ],
+    "starter": "from typing import List\n\ndef coin_change(coins: List[int], amount: int) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "coin_change([1,5,11], 15)", "expected": "3" },
+      { "fn": "coin_change([2], 3)", "expected": "-1" },
+      { "fn": "coin_change([1], 0)", "expected": "0" },
+      { "fn": "coin_change([1,2,5], 11)", "expected": "3" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 20,
+    "title": "Number of Islands",
+    "difficulty": "medium",
+    "tags": ["graphs", "BFS", "DFS"],
+    "description": "Given a 2D grid of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and formed by connecting adjacent lands horizontally or vertically.\n\nConstraints:\n- m == grid.length, n == grid[i].length\n- 1 <= m, n <= 300",
+    "examples": [
+      { "input": "[['1','1','0'],['0','1','0'],['0','0','1']]", "output": "2" }
+    ],
+    "starter": "from typing import List\n\ndef num_islands(grid: List[List[str]]) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "num_islands([['1','1','0','0','0'],['1','1','0','0','0'],['0','0','1','0','0'],['0','0','0','1','1']])", "expected": "3" },
+      { "fn": "num_islands([['1','1','1'],['0','1','0'],['1','1','1']])", "expected": "1" },
+      { "fn": "num_islands([['0']])", "expected": "0" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 21,
+    "title": "Climbing Stairs",
+    "difficulty": "easy",
+    "tags": ["dp", "recursion"],
+    "description": "You are climbing a staircase with n steps. Each time you can climb 1 or 2 steps. In how many distinct ways can you climb to the top?\n\nConstraints:\n- 1 <= n <= 45",
+    "examples": [
+      { "input": "n = 3", "output": "3" },
+      { "input": "n = 5", "output": "8" }
+    ],
+    "starter": "def climb_stairs(n):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "climb_stairs(1)", "expected": "1" },
+      { "fn": "climb_stairs(2)", "expected": "2" },
+      { "fn": "climb_stairs(3)", "expected": "3" },
+      { "fn": "climb_stairs(5)", "expected": "8" },
+      { "fn": "climb_stairs(10)", "expected": "89" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 22,
+    "title": "Linked List Cycle",
+    "difficulty": "easy",
+    "tags": ["linked list", "two pointers"],
+    "description": "Given a linked list, determine if it has a cycle using Floyd's cycle detection algorithm (fast and slow pointers).\n\nReturn True if there is a cycle, False otherwise.\n\nNote: Implement both the ListNode class and has_cycle function.",
+    "examples": [
+      { "input": "head = [3,2,0,-4], pos = 1", "output": "True" }
+    ],
+    "starter": "class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef has_cycle(head):\n    # use fast and slow pointers\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "(lambda: (lambda n1,n2,n3: (setattr(n3,'next',n2), has_cycle(n1)))(ListNode(3,ListNode(2,(lambda n: setattr(n,'next',ListNode(-4,None)) or n)(ListNode(0)))),ListNode(2),ListNode(-4)))[1]", "expected": "True" },
+      { "fn": "has_cycle(ListNode(1, ListNode(2)))", "expected": "False" },
+      { "fn": "has_cycle(None)", "expected": "False" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 23,
+    "title": "Maximum Subarray",
+    "difficulty": "medium",
+    "tags": ["dp", "arrays"],
+    "description": "Given an integer array nums, find the contiguous subarray with the largest sum and return its sum.\n\nKadane's algorithm runs in O(n) — aim for that.\n\nConstraints:\n- 1 <= nums.length <= 3 * 10^4\n- -10^5 <= nums[i] <= 10^5",
+    "examples": [
+      { "input": "[-2,1,-3,4,-1,2,1,-5,4]", "output": "6" },
+      { "input": "[1]", "output": "1" }
+    ],
+    "starter": "from typing import List\n\ndef max_subarray(nums: List[int]) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "max_subarray([-2,1,-3,4,-1,2,1,-5,4])", "expected": "6" },
+      { "fn": "max_subarray([1])", "expected": "1" },
+      { "fn": "max_subarray([-1])", "expected": "-1" },
+      { "fn": "max_subarray([-2,-1])", "expected": "-1" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 24,
+    "title": "3Sum",
+    "difficulty": "medium",
+    "tags": ["arrays", "two pointers", "sorting"],
+    "description": "Given an integer array nums, return all triplets [nums[i], nums[j], nums[k]] such that i, j, k are distinct and nums[i] + nums[j] + nums[k] == 0.\n\nThe solution set must not contain duplicate triplets.\n\nConstraints:\n- 3 <= nums.length <= 3000",
+    "examples": [
+      { "input": "[-1,0,1,2,-1,-4]", "output": "[[-1,-1,2],[-1,0,1]]" }
+    ],
+    "starter": "from typing import List\n\ndef three_sum(nums: List[int]) -> List[List[int]]:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "sorted(three_sum([-1,0,1,2,-1,-4]))", "expected": "[[-1, -1, 2], [-1, 0, 1]]" },
+      { "fn": "three_sum([0,1,1])", "expected": "[]" },
+      { "fn": "three_sum([0,0,0])", "expected": "[[0, 0, 0]]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 25,
+    "title": "Decode Ways",
+    "difficulty": "medium",
+    "tags": ["dp", "strings"],
+    "description": "A message containing letters A-Z can be encoded as numbers (A=1, B=2, ..., Z=26). Given a string of digits, return the number of ways to decode it.\n\nConstraints:\n- 1 <= s.length <= 100\n- s contains only digits\n- s may contain leading zeros",
+    "examples": [
+      { "input": "'12'", "output": "2" },
+      { "input": "'226'", "output": "3" },
+      { "input": "'06'", "output": "0" }
+    ],
+    "starter": "def num_decodings(s):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "num_decodings('12')", "expected": "2" },
+      { "fn": "num_decodings('226')", "expected": "3" },
+      { "fn": "num_decodings('06')", "expected": "0" },
+      { "fn": "num_decodings('11106')", "expected": "2" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 26,
+    "title": "Unique Paths",
+    "difficulty": "medium",
+    "tags": ["dp", "math"],
+    "description": "A robot is on an m x n grid at the top-left corner. It can only move right or down. How many unique paths are there to reach the bottom-right corner?\n\nConstraints:\n- 1 <= m, n <= 100",
+    "examples": [
+      { "input": "m=3, n=7", "output": "28" },
+      { "input": "m=3, n=2", "output": "3" }
+    ],
+    "starter": "def unique_paths(m, n):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "unique_paths(3,7)", "expected": "28" },
+      { "fn": "unique_paths(3,2)", "expected": "3" },
+      { "fn": "unique_paths(1,1)", "expected": "1" },
+      { "fn": "unique_paths(7,3)", "expected": "28" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 27,
+    "title": "Longest Common Subsequence",
+    "difficulty": "medium",
+    "tags": ["dp", "strings"],
+    "description": "Given two strings text1 and text2, return the length of their longest common subsequence. A subsequence is a sequence derived from the string by deleting some characters without changing the order.\n\nConstraints:\n- 1 <= text1.length, text2.length <= 1000",
+    "examples": [
+      { "input": "text1='abcde', text2='ace'", "output": "3" },
+      { "input": "text1='abc', text2='abc'", "output": "3" }
+    ],
+    "starter": "def longest_common_subsequence(text1, text2):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "longest_common_subsequence('abcde','ace')", "expected": "3" },
+      { "fn": "longest_common_subsequence('abc','abc')", "expected": "3" },
+      { "fn": "longest_common_subsequence('abc','def')", "expected": "0" },
+      { "fn": "longest_common_subsequence('oxcpqrsvwf','shmtulqrypy')", "expected": "2" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 28,
+    "title": "House Robber",
+    "difficulty": "medium",
+    "tags": ["dp", "arrays"],
+    "description": "You are a robber planning to rob houses along a street. Adjacent houses have security systems connected — you cannot rob two adjacent houses. Given an array of non-negative integers representing the amount of money in each house, return the maximum amount you can rob.\n\nConstraints:\n- 1 <= nums.length <= 100",
+    "examples": [
+      { "input": "[1,2,3,1]", "output": "4" },
+      { "input": "[2,7,9,3,1]", "output": "12" }
+    ],
+    "starter": "from typing import List\n\ndef rob(nums: List[int]) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "rob([1,2,3,1])", "expected": "4" },
+      { "fn": "rob([2,7,9,3,1])", "expected": "12" },
+      { "fn": "rob([1])", "expected": "1" },
+      { "fn": "rob([2,1])", "expected": "2" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 29,
+    "title": "Search in Rotated Sorted Array",
+    "difficulty": "medium",
+    "tags": ["arrays", "binary search"],
+    "description": "Given an integer array nums sorted in ascending order that has been rotated at an unknown pivot, search for a target value. Return its index or -1.\n\nMust run in O(log n) time.\n\nConstraints:\n- All values are unique\n- 1 <= nums.length <= 5000",
+    "examples": [
+      { "input": "nums=[4,5,6,7,0,1,2], target=0", "output": "4" },
+      { "input": "nums=[4,5,6,7,0,1,2], target=3", "output": "-1" }
+    ],
+    "starter": "from typing import List\n\ndef search(nums: List[int], target: int) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "search([4,5,6,7,0,1,2], 0)", "expected": "4" },
+      { "fn": "search([4,5,6,7,0,1,2], 3)", "expected": "-1" },
+      { "fn": "search([1], 0)", "expected": "-1" },
+      { "fn": "search([1,3], 3)", "expected": "1" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 30,
+    "title": "Top K Frequent Elements",
+    "difficulty": "medium",
+    "tags": ["arrays", "hashmap", "heap"],
+    "description": "Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.\n\nMust be better than O(n log n) time complexity.\n\nConstraints:\n- 1 <= nums.length <= 10^5\n- k is valid (1 <= k <= number of unique elements)",
+    "examples": [
+      { "input": "nums=[1,1,1,2,2,3], k=2", "output": "[1,2]" },
+      { "input": "nums=[1], k=1", "output": "[1]" }
+    ],
+    "starter": "from typing import List\n\ndef top_k_frequent(nums: List[int], k: int) -> List[int]:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "sorted(top_k_frequent([1,1,1,2,2,3], 2))", "expected": "[1, 2]" },
+      { "fn": "top_k_frequent([1], 1)", "expected": "[1]" },
+      { "fn": "sorted(top_k_frequent([4,1,1,1,2,2,3], 2))", "expected": "[1, 2]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 31,
+    "title": "LRU Cache",
+    "difficulty": "hard",
+    "tags": ["design", "hashmap", "linked list"],
+    "description": "Design a data structure that follows the Least Recently Used (LRU) cache constraints.\n\nImplement LRUCache with:\n- LRUCache(capacity) — initialize with positive capacity\n- get(key) — return value if exists, else -1\n- put(key, value) — insert or update. Evict LRU key if over capacity.\n\nBoth operations must run in O(1) time.",
+    "examples": [
+      { "input": "cache=LRUCache(2); put(1,1); put(2,2); get(1)=1; put(3,3); get(2)=-1", "output": "-1" }
+    ],
+    "starter": "class LRUCache:\n    def __init__(self, capacity: int):\n        pass\n\n    def get(self, key: int) -> int:\n        pass\n\n    def put(self, key: int, value: int) -> None:\n        pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "(lambda c: (c.put(1,1),c.put(2,2),c.get(1)) and c.get(1))(LRUCache(2))", "expected": "1" },
+      { "fn": "(lambda c: (c.put(1,1),c.put(2,2),c.put(3,3),c.get(2))[-1])(LRUCache(2))", "expected": "-1" },
+      { "fn": "(lambda c: (c.put(1,1),c.put(2,2),c.get(1),c.put(3,3),c.get(2))[-1])(LRUCache(2))", "expected": "-1" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 32,
+    "title": "Word Ladder",
+    "difficulty": "hard",
+    "tags": ["BFS", "graphs", "strings"],
+    "description": "Given beginWord, endWord, and a wordList, return the length of the shortest transformation sequence from beginWord to endWord where each step changes exactly one letter and each intermediate word must be in wordList.\n\nReturn 0 if no such sequence exists.\n\nConstraints:\n- 1 <= wordList.length <= 5000",
+    "examples": [
+      { "input": "beginWord='hit', endWord='cog', wordList=['hot','dot','dog','lot','log','cog']", "output": "5" }
+    ],
+    "starter": "from typing import List\n\ndef ladder_length(beginWord: str, endWord: str, wordList: List[str]) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "ladder_length('hit','cog',['hot','dot','dog','lot','log','cog'])", "expected": "5" },
+      { "fn": "ladder_length('hit','cog',['hot','dot','dog','lot','log'])", "expected": "0" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 33,
+    "title": "Trapping Rain Water",
+    "difficulty": "hard",
+    "tags": ["arrays", "two pointers", "stack"],
+    "description": "Given n non-negative integers representing an elevation map where each bar has width 1, compute how much water it can trap after raining.\n\nConstraints:\n- n == height.length\n- 1 <= n <= 2 * 10^4\n- 0 <= height[i] <= 10^5",
+    "examples": [
+      { "input": "[0,1,0,2,1,0,1,3,2,1,2,1]", "output": "6" },
+      { "input": "[4,2,0,3,2,5]", "output": "9" }
+    ],
+    "starter": "from typing import List\n\ndef trap(height: List[int]) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "trap([0,1,0,2,1,0,1,3,2,1,2,1])", "expected": "6" },
+      { "fn": "trap([4,2,0,3,2,5])", "expected": "9" },
+      { "fn": "trap([1,0,1])", "expected": "1" },
+      { "fn": "trap([3,0,2,0,4])", "expected": "7" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 34,
+    "title": "Median of Two Sorted Arrays",
+    "difficulty": "hard",
+    "tags": ["arrays", "binary search", "divide and conquer"],
+    "description": "Given two sorted arrays nums1 and nums2, return the median of the two sorted arrays.\n\nThe overall run time complexity should be O(log(m+n)).\n\nConstraints:\n- 0 <= nums1.length <= 1000\n- 0 <= nums2.length <= 1000\n- -10^6 <= nums1[i], nums2[i] <= 10^6",
+    "examples": [
+      { "input": "nums1=[1,3], nums2=[2]", "output": "2.0" },
+      { "input": "nums1=[1,2], nums2=[3,4]", "output": "2.5" }
+    ],
+    "starter": "from typing import List\n\ndef find_median_sorted_arrays(nums1: List[int], nums2: List[int]) -> float:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "find_median_sorted_arrays([1,3],[2])", "expected": "2.0" },
+      { "fn": "find_median_sorted_arrays([1,2],[3,4])", "expected": "2.5" },
+      { "fn": "find_median_sorted_arrays([],[1])", "expected": "1.0" },
+      { "fn": "find_median_sorted_arrays([2],[1,3,4])", "expected": "2.5" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 35,
+    "title": "N-Queens",
+    "difficulty": "hard",
+    "tags": ["backtracking", "recursion"],
+    "description": "The N-Queens puzzle places n queens on an n x n chessboard so that no two queens attack each other. Return all distinct solutions.\n\nEach solution contains a distinct board configuration where 'Q' indicates a queen and '.' indicates an empty space.\n\nConstraints:\n- 1 <= n <= 9",
+    "examples": [
+      { "input": "n=4", "output": "2 solutions" }
+    ],
+    "starter": "from typing import List\n\ndef solve_n_queens(n: int) -> List[List[str]]:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "len(solve_n_queens(4))", "expected": "2" },
+      { "fn": "len(solve_n_queens(1))", "expected": "1" },
+      { "fn": "len(solve_n_queens(8))", "expected": "92" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 36,
+    "title": "Serialize and Deserialize Binary Tree",
+    "difficulty": "hard",
+    "tags": ["trees", "BFS", "design"],
+    "description": "Design an algorithm to serialize and deserialize a binary tree. Serialization converts a tree to a string; deserialization reconstructs the tree from the string.\n\nThere is no restriction on your format — just ensure encode(decode(s)) == s.\n\nConstraints:\n- 0 <= number of nodes <= 10^4",
+    "examples": [
+      { "input": "root = [1,2,3,null,null,4,5]", "output": "same tree after serialize/deserialize" }
+    ],
+    "starter": "class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\nclass Codec:\n    def serialize(self, root):\n        # your code here\n        pass\n\n    def deserialize(self, data):\n        # your code here\n        pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "(lambda c,r: c.serialize(c.deserialize(c.serialize(r))) == c.serialize(r))(Codec(), TreeNode(1,TreeNode(2),TreeNode(3,TreeNode(4),TreeNode(5))))", "expected": "True" },
+      { "fn": "(lambda c: c.deserialize(c.serialize(None)) is None)(Codec())", "expected": "True" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 37,
+    "title": "Regular Expression Matching",
+    "difficulty": "hard",
+    "tags": ["dp", "strings", "recursion"],
+    "description": "Implement regular expression matching with support for '.' and '*' where:\n- '.' matches any single character\n- '*' matches zero or more of the preceding element\n\nThe matching should cover the entire input string.\n\nConstraints:\n- 1 <= s.length <= 20\n- 1 <= p.length <= 30",
+    "examples": [
+      { "input": "s='aa', p='a*'", "output": "True" },
+      { "input": "s='ab', p='.*'", "output": "True" },
+      { "input": "s='aa', p='a'", "output": "False" }
+    ],
+    "starter": "def is_match(s, p):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "is_match('aa','a')", "expected": "False" },
+      { "fn": "is_match('aa','a*')", "expected": "True" },
+      { "fn": "is_match('ab','.*')", "expected": "True" },
+      { "fn": "is_match('aab','c*a*b')", "expected": "True" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 38,
+    "title": "Sudoku Solver",
+    "difficulty": "hard",
+    "tags": ["backtracking", "matrix"],
+    "description": "Write a program to solve a Sudoku puzzle by filling the empty cells marked as '.'.\n\nA valid Sudoku must satisfy:\n- Each row contains digits 1-9 without repetition\n- Each column contains digits 1-9 without repetition\n- Each 3x3 box contains digits 1-9 without repetition\n\nConstraints:\n- board is always a valid (possibly partial) Sudoku",
+    "examples": [
+      { "input": "board with empty cells '.'", "output": "filled board" }
+    ],
+    "starter": "from typing import List\n\ndef solve_sudoku(board: List[List[str]]) -> None:\n    # modify board in-place\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "(lambda b: (solve_sudoku(b), b[0][0]))([ ['5','3','.','.','7','.','.','.','.'],['6','.','.','1','9','5','.','.','.'],['.','9','8','.','.','.','.','6','.'],['8','.','.','.','6','.','.','.','3'],['4','.','.','8','.','3','.','.','1'],['7','.','.','.','2','.','.','.','6'],['.','6','.','.','.','.','2','8','.'],['.','.','.','4','1','9','.','.','5'],['.','.','.','.','8','.','.','7','9'] ])[1]", "expected": "'5'" },
+      { "fn": "(lambda b: (solve_sudoku(b), all(len(set(row))==9 for row in b)))([ ['5','3','.','.','7','.','.','.','.'],['6','.','.','1','9','5','.','.','.'],['.','9','8','.','.','.','.','6','.'],['8','.','.','.','6','.','.','.','3'],['4','.','.','8','.','3','.','.','1'],['7','.','.','.','2','.','.','.','6'],['.','6','.','.','.','.','2','8','.'],['.','.','.','4','1','9','.','.','5'],['.','.','.','.','8','.','.','7','9'] ])[1]", "expected": "True" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 39,
+    "title": "Merge K Sorted Lists",
+    "difficulty": "hard",
+    "tags": ["linked list", "heap", "divide and conquer"],
+    "description": "Merge k sorted linked lists into one sorted linked list.\n\nConstraints:\n- k == lists.length\n- 0 <= k <= 10^4\n- 0 <= lists[i].length <= 500\n- -10^4 <= lists[i][j] <= 10^4",
+    "examples": [
+      { "input": "lists=[[1,4,5],[1,3,4],[2,6]]", "output": "[1,1,2,3,4,4,5,6]" }
+    ],
+    "starter": "from typing import List, Optional\nimport heapq\n\nclass ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\ndef merge_k_lists(lists: List[Optional[ListNode]]) -> Optional[ListNode]:\n    # your code here\n    pass\n\ndef to_list(node):\n    result = []\n    while node:\n        result.append(node.val)\n        node = node.next\n    return result\n\ndef make_list(vals):\n    dummy = ListNode()\n    cur = dummy\n    for v in vals:\n        cur.next = ListNode(v)\n        cur = cur.next\n    return dummy.next\n\n# tests run automatically",
+    "tests": [
+      { "fn": "to_list(merge_k_lists([make_list([1,4,5]),make_list([1,3,4]),make_list([2,6])]))", "expected": "[1, 1, 2, 3, 4, 4, 5, 6]" },
+      { "fn": "to_list(merge_k_lists([]))", "expected": "[]" },
+      { "fn": "to_list(merge_k_lists([make_list([])]))", "expected": "[]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 40,
+    "title": "Longest Palindromic Substring",
+    "difficulty": "medium",
+    "tags": ["strings", "dp", "two pointers"],
+    "description": "Given a string s, return the longest palindromic substring.\n\nIf multiple answers exist, return any one. Expand around center technique runs in O(n^2).\n\nConstraints:\n- 1 <= s.length <= 1000\n- s consists of only digits and English letters",
+    "examples": [
+      { "input": "'babad'", "output": "'bab' or 'aba'" },
+      { "input": "'cbbd'", "output": "'bb'" }
+    ],
+    "starter": "def longest_palindrome(s):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "longest_palindrome('babad') in ['bab','aba']", "expected": "True" },
+      { "fn": "longest_palindrome('cbbd')", "expected": "'bb'" },
+      { "fn": "longest_palindrome('a')", "expected": "'a'" },
+      { "fn": "longest_palindrome('racecar')", "expected": "'racecar'" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 41,
+    "title": "Letter Combinations of Phone Number",
+    "difficulty": "medium",
+    "tags": ["backtracking", "strings"],
+    "description": "Given a string containing digits 2-9, return all possible letter combinations that the number could represent (like old phone keypads).\n\nMapping: 2=abc, 3=def, 4=ghi, 5=jkl, 6=mno, 7=pqrs, 8=tuv, 9=wxyz\n\nConstraints:\n- 0 <= digits.length <= 4",
+    "examples": [
+      { "input": "'23'", "output": "['ad','ae','af','bd','be','bf','cd','ce','cf']" }
+    ],
+    "starter": "from typing import List\n\ndef letter_combinations(digits: str) -> List[str]:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "sorted(letter_combinations('23'))", "expected": "['ad', 'ae', 'af', 'bd', 'be', 'bf', 'cd', 'ce', 'cf']" },
+      { "fn": "letter_combinations('')", "expected": "[]" },
+      { "fn": "sorted(letter_combinations('2'))", "expected": "['a', 'b', 'c']" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 42,
+    "title": "Subsets",
+    "difficulty": "medium",
+    "tags": ["backtracking", "arrays"],
+    "description": "Given an integer array nums of unique elements, return all possible subsets (the power set).\n\nThe solution set must not contain duplicate subsets. Return the solution in any order.\n\nConstraints:\n- 1 <= nums.length <= 10\n- -10 <= nums[i] <= 10",
+    "examples": [
+      { "input": "[1,2,3]", "output": "[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]" }
+    ],
+    "starter": "from typing import List\n\ndef subsets(nums: List[int]) -> List[List[int]]:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "len(subsets([1,2,3]))", "expected": "8" },
+      { "fn": "[] in subsets([1,2,3])", "expected": "True" },
+      { "fn": "len(subsets([0]))", "expected": "2" },
+      { "fn": "sorted([sorted(s) for s in subsets([1,2])])", "expected": "[[], [1], [1, 2], [2]]" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 43,
+    "title": "Word Search",
+    "difficulty": "medium",
+    "tags": ["backtracking", "DFS", "matrix"],
+    "description": "Given an m x n grid of characters and a word, return True if the word exists in the grid.\n\nThe word can be constructed from letters of sequentially adjacent cells (horizontally or vertically). The same letter cell may not be used more than once.\n\nConstraints:\n- m, n >= 1\n- 1 <= word.length <= 15",
+    "examples": [
+      { "input": "board=[['A','B','C','E'],['S','F','C','S'],['A','D','E','E']], word='ABCCED'", "output": "True" }
+    ],
+    "starter": "from typing import List\n\ndef exist(board: List[List[str]], word: str) -> bool:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "exist([['A','B','C','E'],['S','F','C','S'],['A','D','E','E']],'ABCCED')", "expected": "True" },
+      { "fn": "exist([['A','B','C','E'],['S','F','C','S'],['A','D','E','E']],'SEE')", "expected": "True" },
+      { "fn": "exist([['A','B','C','E'],['S','F','C','S'],['A','D','E','E']],'ABCB')", "expected": "False" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 44,
+    "title": "Course Schedule",
+    "difficulty": "medium",
+    "tags": ["graphs", "topological sort", "BFS"],
+    "description": "There are numCourses courses (0 to numCourses-1). Given prerequisites[i] = [a, b] meaning you must take course b before a, determine if it's possible to finish all courses.\n\nConstraints:\n- 1 <= numCourses <= 2000\n- 0 <= prerequisites.length <= 5000",
+    "examples": [
+      { "input": "numCourses=2, prerequisites=[[1,0]]", "output": "True" },
+      { "input": "numCourses=2, prerequisites=[[1,0],[0,1]]", "output": "False" }
+    ],
+    "starter": "from typing import List\n\ndef can_finish(numCourses: int, prerequisites: List[List[int]]) -> bool:\n    # your code here — detect cycle in directed graph\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "can_finish(2,[[1,0]])", "expected": "True" },
+      { "fn": "can_finish(2,[[1,0],[0,1]])", "expected": "False" },
+      { "fn": "can_finish(1,[])", "expected": "True" },
+      { "fn": "can_finish(3,[[1,0],[2,1]])", "expected": "True" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 45,
+    "title": "Implement Trie",
+    "difficulty": "medium",
+    "tags": ["trie", "design", "strings"],
+    "description": "Implement a Trie (prefix tree) with insert, search, and startsWith methods.\n\n- insert(word) — inserts word into the trie\n- search(word) — returns True if word is in the trie\n- startsWith(prefix) — returns True if any word starts with prefix\n\nConstraints:\n- 1 <= word.length <= 2000\n- Only lowercase English letters",
+    "examples": [
+      { "input": "insert('apple'); search('apple')=True; search('app')=False; startsWith('app')=True", "output": "all correct" }
+    ],
+    "starter": "class Trie:\n    def __init__(self):\n        pass\n\n    def insert(self, word: str) -> None:\n        pass\n\n    def search(self, word: str) -> bool:\n        pass\n\n    def startsWith(self, prefix: str) -> bool:\n        pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "(lambda t: (t.insert('apple'), t.search('apple'))[-1])(Trie())", "expected": "True" },
+      { "fn": "(lambda t: (t.insert('apple'), t.search('app'))[-1])(Trie())", "expected": "False" },
+      { "fn": "(lambda t: (t.insert('apple'), t.startsWith('app'))[-1])(Trie())", "expected": "True" },
+      { "fn": "(lambda t: (t.insert('apple'),t.insert('app'),t.search('app'))[-1])(Trie())", "expected": "True" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 46,
+    "title": "Kth Largest Element",
+    "difficulty": "medium",
+    "tags": ["arrays", "heap", "quickselect"],
+    "description": "Given an integer array nums and an integer k, return the kth largest element in the array.\n\nNote: kth largest means in sorted order, not the kth distinct element.\n\nTry to solve it in O(n) using quickselect.\n\nConstraints:\n- 1 <= k <= nums.length <= 10^5",
+    "examples": [
+      { "input": "nums=[3,2,1,5,6,4], k=2", "output": "5" },
+      { "input": "nums=[3,2,3,1,2,4,5,5,6], k=4", "output": "4" }
+    ],
+    "starter": "from typing import List\n\ndef find_kth_largest(nums: List[int], k: int) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "find_kth_largest([3,2,1,5,6,4], 2)", "expected": "5" },
+      { "fn": "find_kth_largest([3,2,3,1,2,4,5,5,6], 4)", "expected": "4" },
+      { "fn": "find_kth_largest([1], 1)", "expected": "1" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 47,
+    "title": "Longest Increasing Subsequence",
+    "difficulty": "medium",
+    "tags": ["dp", "binary search"],
+    "description": "Given an integer array nums, return the length of the longest strictly increasing subsequence.\n\nA subsequence is derived from the array by deleting some elements without changing the order of remaining elements.\n\nTry O(n log n) with patience sorting / binary search.\n\nConstraints:\n- 1 <= nums.length <= 2500",
+    "examples": [
+      { "input": "[10,9,2,5,3,7,101,18]", "output": "4" },
+      { "input": "[0,1,0,3,2,3]", "output": "4" }
+    ],
+    "starter": "from typing import List\n\ndef length_of_lis(nums: List[int]) -> int:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "length_of_lis([10,9,2,5,3,7,101,18])", "expected": "4" },
+      { "fn": "length_of_lis([0,1,0,3,2,3])", "expected": "4" },
+      { "fn": "length_of_lis([7,7,7,7,7])", "expected": "1" },
+      { "fn": "length_of_lis([1,3,6,7,9,4,10,5,6])", "expected": "6" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 48,
+    "title": "Minimum Window Substring",
+    "difficulty": "hard",
+    "tags": ["strings", "sliding window", "hashmap"],
+    "description": "Given strings s and t, return the minimum window substring of s that contains all characters of t. If no such substring exists, return ''.\n\nMust run in O(m+n) time.\n\nConstraints:\n- 1 <= s.length, t.length <= 10^5",
+    "examples": [
+      { "input": "s='ADOBECODEBANC', t='ABC'", "output": "'BANC'" },
+      { "input": "s='a', t='a'", "output": "'a'" }
+    ],
+    "starter": "def min_window(s, t):\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "min_window('ADOBECODEBANC','ABC')", "expected": "'BANC'" },
+      { "fn": "min_window('a','a')", "expected": "'a'" },
+      { "fn": "min_window('a','b')", "expected": "''" },
+      { "fn": "min_window('aa','aa')", "expected": "'aa'" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 49,
+    "title": "Alien Dictionary",
+    "difficulty": "hard",
+    "tags": ["graphs", "topological sort", "strings"],
+    "description": "Given a list of words from an alien language dictionary sorted lexicographically by the alien language's rules, derive the order of characters in that language.\n\nReturn a string of unique characters in the correct order, or '' if invalid.\n\nConstraints:\n- 1 <= words.length <= 100\n- 1 <= words[i].length <= 100",
+    "examples": [
+      { "input": "words=['wrt','wrf','er','ett','rftt']", "output": "'wertf'" }
+    ],
+    "starter": "from typing import List\n\ndef alien_order(words: List[str]) -> str:\n    # your code here\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "alien_order(['wrt','wrf','er','ett','rftt'])", "expected": "'wertf'" },
+      { "fn": "alien_order(['z','x'])", "expected": "'zx'" },
+      { "fn": "alien_order(['z','x','z'])", "expected": "''" }
+    ],
+    "score": 0, "solved": false
+  },
+  {
+    "id": 50,
+    "title": "Burst Balloons",
+    "difficulty": "hard",
+    "tags": ["dp", "divide and conquer"],
+    "description": "You have n balloons indexed 0 to n-1. Each balloon has a number on it. If you burst balloon i, you get nums[i-1] * nums[i] * nums[i+1] coins. Balloons at boundaries have value 1 outside.\n\nReturn the maximum coins you can collect by bursting all balloons.\n\nConstraints:\n- n == nums.length\n- 1 <= n <= 300\n- 0 <= nums[i] <= 100",
+    "examples": [
+      { "input": "[3,1,5,8]", "output": "167" },
+      { "input": "[1,5]", "output": "10" }
+    ],
+    "starter": "from typing import List\n\ndef max_coins(nums: List[int]) -> int:\n    # your code here — interval DP\n    pass\n\n# tests run automatically",
+    "tests": [
+      { "fn": "max_coins([3,1,5,8])", "expected": "167" },
+      { "fn": "max_coins([1,5])", "expected": "10" },
+      { "fn": "max_coins([1])", "expected": "1" },
+      { "fn": "max_coins([3,1,5])", "expected": "35" }
+    ],
+    "score": 0, "solved": false
+  }
+]
